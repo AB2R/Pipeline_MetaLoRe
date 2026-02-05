@@ -1,0 +1,5 @@
+# Fichiers binaires ou gros fichiers locaux
+bin/easynanometa.sif
+
+# Dossier de données local
+data/
