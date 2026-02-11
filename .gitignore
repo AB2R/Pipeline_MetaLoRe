@@ -3,6 +3,7 @@ bin/easynanometa.sif
 
 # Dossier de données local
 data/
+.nextflow.log*
 *.log
 .nextflow/
 null/
