@@ -5,6 +5,7 @@ bin/easynanometa.sif
 data/
 .nextflow.log*
 *.log
+*.o*
 .nextflow/
 null/
 work/
