@@ -7,7 +7,7 @@ FASTQ_FILE=${args[1]}
 LOGCMD=${args[2]}
 
 # Command to execute
-CMD="porechop_abi -abi -t ${NCPUS} -i ${FASTQ_FILE} -o trim_${FASTQ_FILE%%.*}"
+CMD="porechop_abi -abi -t ${NCPUS} -i ${FASTQ_FILE} -o trim_${FASTQ_FILE%%.*}.fastq"
 
 # Save command in log
 echo ${CMD} > ${LOGCMD}
