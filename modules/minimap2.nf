@@ -8,7 +8,7 @@ process minimap2 {
 
     // Result files published in Netxtflow result directory.
     // See also 'output' directive, below.
-    publishDir "${params.resultdir}/3-Alignment/1-minimap",   mode: 'copy', pattern: '*.sam'
+    publishDir "${params.resultdir}/3-alignment/1-minimap",   mode: 'copy', pattern: '*.sam'
     publishDir "${params.resultdir}/logs/minimap2",     mode: 'copy', pattern: 'minimap2.log'
     publishDir "${params.outdir}/00_pipeline_info/cmd", mode: 'copy', pattern: 'minimap2.cmd'
 

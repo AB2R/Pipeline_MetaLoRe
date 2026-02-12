@@ -8,7 +8,7 @@ process nanofilt {
 
     // Result files published in Netxtflow result directory.
     // See also 'output' directive, below.
-    publishDir "${params.resultdir}/2-Trimming_Filtering/2-nanofilt",   mode: 'copy', pattern: 'filt_*'
+    publishDir "${params.resultdir}/2-trimming_filtering/2-nanofilt",   mode: 'copy', pattern: 'filt_*'
     publishDir "${params.resultdir}/logs/nanofilt",     mode: 'copy', pattern: 'nanofilt.log'
     publishDir "${params.outdir}/00_pipeline_info/cmd", mode: 'copy', pattern: 'nanofilt.cmd'
 
