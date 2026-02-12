@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# Get script arguments coming from modules/nanoplot.nf process
+# Get script arguments coming from modules/minimap2.nf process
 args=("$@")
 REF=${args[0]}
 FASTQ_FILE=${args[1]}

@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# Get script arguments coming from modules/nanoplot.nf process
+# Get script arguments coming from modules/nanofilt.nf process
 args=("$@")
 FASTQ_FILE=${args[0]}
 MIN_READ_LENGTH=${args[1]}

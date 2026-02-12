@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# Get script arguments coming from modules/nanoplot.nf process
+# Get script arguments coming from modules/samtools.nf process
 args=("$@")
 NCPUS=${args[0]}
 FASTQ_FILE=${args[1]}

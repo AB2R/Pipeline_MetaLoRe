@@ -1,11 +1,5 @@
 #!/usr/bin/env bash
 
-#Initialisation env : conda 
-#. /local/env/envconda.sh
-
-#Activation env ont_analysis
-#conda activate /home/genouest/anses_ab2r/cpoisson/envs/ont_analysis
-
 # Get script arguments coming from modules/nanoplot.nf process
 args=("$@")
 FASTQ_FILE=${args[0]}

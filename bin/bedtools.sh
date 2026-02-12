@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# Get script arguments coming from modules/nanoplot.nf process
+# Get script arguments coming from modules/bedtools.nf process
 args=("$@")
 FASTQ_FILE=${args[0]}
 LOGCMD=${args[1]}
