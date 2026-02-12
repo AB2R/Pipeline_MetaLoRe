@@ -8,7 +8,8 @@ process samtools {
 
     // Result files published in Netxtflow result directory.
     // See also 'output' directive, below.
-    publishDir "${params.resultdir}/3-Alignment/2-samtools",   mode: 'copy', pattern: '*.bam'
+    publishDir "${params.resultdir}/3-Alignment/2-samtools",   mode: 'copy', pattern: 'unmaped*'
+    publishDir "${params.resultdir}/3-Alignment/2-samtools",   mode: 'copy', pattern: 'sorted*'
     publishDir "${params.resultdir}/logs/samtools",     mode: 'copy', pattern: 'samtools.log'
     publishDir "${params.outdir}/00_pipeline_info/cmd", mode: 'copy', pattern: 'samtools.cmd'
 
@@ -18,7 +19,8 @@ process samtools {
 
     // Workflow output stream
     output:
-        path("*.bam"), emit: bam_ch
+	path("unmaped*")
+        path("sorted*"), emit: bam_ch
         // we also collect commands executed and log files
         path("samtools.log")
         path("samtools.cmd")
