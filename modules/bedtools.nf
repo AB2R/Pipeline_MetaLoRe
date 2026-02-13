@@ -8,7 +8,7 @@ process bedtools {
 
     // Result files published in Netxtflow result directory.
     // See also 'output' directive, below.
-    publishDir "${params.resultdir}/3-alignment/3-bedtools",   mode: 'copy', pattern: '*.fastq'
+    publishDir "${params.resultdir}/3-alignment_1/3-bedtools",   mode: 'copy', pattern: '*.fastq'
     publishDir "${params.resultdir}/logs/bedtools",     mode: 'copy', pattern: 'bedtools.log'
     publishDir "${params.outdir}/00_pipeline_info/cmd", mode: 'copy', pattern: 'bedtools.cmd'
 
