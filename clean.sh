@@ -11,7 +11,7 @@ read -e -p "Would you like to purge working and results files? (y/n) " choice
 [[ "$choice" == [Yy]* ]] && echo "Purging files..." || exit 1
 
 rm -rf $WK_DIR
-#rm -rf results
+rm -rf results
 rm -f rm *.o*
 rm -f rm *.e*
 rm -f *.log

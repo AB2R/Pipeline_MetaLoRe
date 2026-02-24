@@ -7,7 +7,7 @@ def helpMessage() {
     log.info"""
 
     Usage:
-
+2.2.1--pyhdfd78af_0
     The typical command for running the pipeline is as follows:
 
         nextflow run main.nf -c cluster.config -profile singularity,custom [params]
@@ -16,6 +16,8 @@ def helpMessage() {
 
 Mandatory:
 --ONT_path		[path]	Absolute path to ONT data files.
+--ref_genome            [path]  Absolute path to reference genome
+--db_kraken             [path]  Absolute path to kraken database
 
 Other options:
 --outdir                [path]	The output directory where the results will be saved.
@@ -55,6 +57,8 @@ summary['Launch dir'] = workflow.launchDir
 summary['Working dir'] = workflow.workDir
 summary['Script dir'] = workflow.projectDir
 summary['ONT file(s)'] = params.ONT_path
+summary['Reference Genome'] = params.ref_genome
+summary['Kraken2 database'] = params.db_kraken
 log.info summary.collect { k,v -> "${k.padRight(18)}: $v" }.join("\n")
 log.info "-\033[91m--------------------------------------------------\033[0m-"
 
@@ -64,10 +68,21 @@ checkHostname()
 /*
  * IMPORTING MODULES
  */
-include { nanoplot }      from './modules/nanoplot.nf'
-include { porechop_abi }  from './modules/porechop_abi.nf'
-include { nanofilt }      from './modules/nanofilt.nf'
-include { minimap2 }      from './modules/minimap2.nf'
+include { nanoplot }        from './modules/nanoplot.nf'
+include { porechop_abi }    from './modules/porechop_abi.nf'
+include { nanofilt }        from './modules/nanofilt.nf'
+include { minimap2_1 }      from './modules/minimap2_1.nf'
+include { samtools_1 }      from './modules/samtools_1.nf'
+include { bedtools }        from './modules/bedtools.nf'
+include { kraken2 }         from './modules/kraken2.nf'
+include { collect_read_id } from './modules/collect_read_id.nf'
+include { seqkit }          from './modules/seqkit.nf'
+include { flye }            from './modules/flye.nf'
+include { minimap2_2 }      from './modules/minimap2_2.nf'
+include { samtools_2 }      from './modules/samtools_2.nf'
+include { medaka }          from './modules/medaka.nf'
+include { quast }           from './modules/quast.nf'
+include { semibin }         from './modules/semibin.nf'
 
 /*
  * CREATE INPUT CHANNELS
@@ -89,7 +104,40 @@ workflow {
     nanofilt(porechop_abi.out.trim_ch.collect())
 
     // Mapping ONT reds on reference genome
-    // minimap2(nanofilt.out.filt_ch.collect())
+    minimap2_1(nanofilt.out.filt_ch.collect())
+
+    // Extracting unmaped reads and sorting alignments
+    samtools_1(minimap2_1.out.aln_ch.collect())
+
+    // BAM to FASTQ conversion
+    bedtools(samtools_1.out.bam_ch.collect())
+
+    // Taxonomic classification
+    kraken2(bedtools.out.fitted_ch.collect())
+
+    // Read ID collection
+    collect_read_id(kraken2.out.kraken_ch.collect())
+
+    // Read extraction
+    seqkit(collect_read_id.out.id_ch.collect(), bedtools.out.fitted_ch.collect())
+
+    // Assembly 
+    flye(seqkit.out.id2_ch.collect())
+
+    // Mappinf ONT reads on assembly
+    minimap2_2(flye.out.asmbl_ch.collect(), seqkit.out.id2_ch.collect())
+
+    // Sorting alignments
+    samtools_2(minimap2_2.out.aln2_ch.collect())
+
+   // Polishing assembly reads
+   medaka(ONT_ch, flye.out.asmbl_ch.collect())
+
+   // Quality control of assembly
+   //quast(nexpolish2.out.polish_ch.collect())
+
+   // Binning of assembly
+   //semibin(nexpolish2.out.polish_ch.collect())
 }
 
 /*

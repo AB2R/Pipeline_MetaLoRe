@@ -8,17 +8,17 @@ process flye {
 
     // Result files published in Netxtflow result directory.
     // See also 'output' directive, below.
-    publishDir "${params.resultdir}/5-assembly/1-flye",   mode: 'copy', pattern: '*.fastq'
+    publishDir "${params.resultdir}/5-assembly/1-flye",   mode: 'copy', pattern: '*.fasta'
     publishDir "${params.resultdir}/logs/flye",     mode: 'copy', pattern: 'flye.log'
     publishDir "${params.outdir}/00_pipeline_info/cmd", mode: 'copy', pattern: 'flye.cmd'
 
     // Workflow input stream
     input:
-        path(fitted_ch)
+        path(id2_ch)
 
     // Workflow output stream
     output:
-        path("*.fastq"), emit: asmbl_ch
+        path("flye_out/*.fasta"), emit: asmbl_ch
         // we also collect commands executed and log files
         path("flye.log")
         path("flye.cmd")
@@ -26,6 +26,6 @@ process flye {
     // Script to execute (located in bin/ sub-directory)
     script:
     """
-    flye.sh ${fitted_ch} ${params.flye_out} ${task.cpus} flye.cmd &> flye.log 2>&1
+    flye.sh ${id2_ch} flye_out ${task.cpus} flye.cmd &> flye.log 2>&1
     """
 }

@@ -19,7 +19,7 @@ process kraken2 {
 
     // Workflow output stream
     output:
-        path("*.kraken")
+        path("*.kraken"), emit: kraken_ch
 	path("*.report")
         // we also collect commands executed and log files
         path("kraken2.log")
