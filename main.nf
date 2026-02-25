@@ -80,9 +80,13 @@ include { seqkit }          from './modules/seqkit.nf'
 include { flye }            from './modules/flye.nf'
 include { minimap2_2 }      from './modules/minimap2_2.nf'
 include { samtools_2 }      from './modules/samtools_2.nf'
+include { racon_1 }         from './modules/racon_1.nf'
+include { minimap2_3 }      from './modules/minimap2_3.nf'
+include { racon_2 }         from './modules/racon_2.nf'
 include { medaka }          from './modules/medaka.nf'
 include { quast }           from './modules/quast.nf'
 include { semibin }         from './modules/semibin.nf'
+include { checkm2 }         from './modules/checkm2.nf'
 
 /*
  * CREATE INPUT CHANNELS
@@ -128,16 +132,28 @@ workflow {
     minimap2_2(flye.out.asmbl_ch.collect(), seqkit.out.id2_ch.collect())
 
     // Sorting alignments
-    samtools_2(minimap2_2.out.aln2_ch.collect())
+    //samtools_2(minimap2_2.out.aln2_ch.collect())
 
-   // Polishing assembly reads
-   medaka(ONT_ch, flye.out.asmbl_ch.collect())
+    // Polishing assembly reads
+    racon_1(seqkit.out.id2_ch.collect(), minimap2_2.out.aln2_ch.collect(), flye.out.asmbl_ch.collect())
 
-   // Quality control of assembly
-   //quast(nexpolish2.out.polish_ch.collect())
+    // Alignment on polish assembly
+    minimap2_3(racon_1.out.polish1_ch.collect(), seqkit.out.id2_ch.collect())
 
-   // Binning of assembly
-   //semibin(nexpolish2.out.polish_ch.collect())
+    // Polishing assembly reads
+    racon_2(seqkit.out.id2_ch.collect(), minimap2_3.out.aln3_ch.collect(), racon_1.out.polish1_ch.collect())
+
+    // Polishing assembly reads
+    //medaka(seqkit.out.id2_ch.collect(), racon_2.out.polish2_ch.collect())
+
+    // Quality control of assembly
+    //quast(nexpolish2.out.polish_ch.collect())
+
+    // Binning of assembly
+    //semibin(nexpolish2.out.polish_ch.collect())
+
+    // Quality control of binning
+    //checkm2(semibin.out.collect())
 }
 
 /*
