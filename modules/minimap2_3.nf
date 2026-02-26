@@ -14,7 +14,7 @@ process minimap2_3 {
 
     // Workflow input stream
     input:
-        path(racon1_ch)
+        path(polish1_ch)
         path(id2_ch)
 
     // Workflow output stream
@@ -27,6 +27,6 @@ process minimap2_3 {
     // Script to execute (located in bin/ sub-directory)
     script:
     """
-    minimap2_3.sh ${racon1_ch} ${id2_ch} minimap2_3.cmd &> minimap2_3.log 2>&1
+    minimap2_3.sh ${polish1_ch} ${id2_ch} minimap2_3.cmd &> minimap2_3.log 2>&1
     """
 }

@@ -18,6 +18,9 @@ Mandatory:
 --ONT_path		[path]	Absolute path to ONT data files.
 --ref_genome            [path]  Absolute path to reference genome
 --db_kraken             [path]  Absolute path to kraken database
+--model_medaka          [str]   Name of the model
+--env_semibin           [str]   Name of the environment
+--db_checkm2            [path]  Absolute path to checkm2 database
 
 Other options:
 --outdir                [path]	The output directory where the results will be saved.
@@ -59,6 +62,9 @@ summary['Script dir'] = workflow.projectDir
 summary['ONT file(s)'] = params.ONT_path
 summary['Reference Genome'] = params.ref_genome
 summary['Kraken2 database'] = params.db_kraken
+summary['Model Medaka'] = params.model_medaka
+summary['Environment SemiBin'] = params.env_semibin
+summary['Checkm2 database'] = params.db_checkm2
 log.info summary.collect { k,v -> "${k.padRight(18)}: $v" }.join("\n")
 log.info "-\033[91m--------------------------------------------------\033[0m-"
 
@@ -79,14 +85,16 @@ include { collect_read_id } from './modules/collect_read_id.nf'
 include { seqkit }          from './modules/seqkit.nf'
 include { flye }            from './modules/flye.nf'
 include { minimap2_2 }      from './modules/minimap2_2.nf'
-include { samtools_2 }      from './modules/samtools_2.nf'
 include { racon_1 }         from './modules/racon_1.nf'
 include { minimap2_3 }      from './modules/minimap2_3.nf'
 include { racon_2 }         from './modules/racon_2.nf'
+include { minimap2_4 }      from './modules/minimap2_4.nf'
+include { samtools_2 }      from './modules/samtools_2.nf'
 include { medaka }          from './modules/medaka.nf'
 include { quast }           from './modules/quast.nf'
 include { semibin }         from './modules/semibin.nf'
 include { checkm2 }         from './modules/checkm2.nf'
+include { prodigal }        from './modules/prodigal.nf'
 
 /*
  * CREATE INPUT CHANNELS
@@ -131,9 +139,6 @@ workflow {
     // Mappinf ONT reads on assembly
     minimap2_2(flye.out.asmbl_ch.collect(), seqkit.out.id2_ch.collect())
 
-    // Sorting alignments
-    //samtools_2(minimap2_2.out.aln2_ch.collect())
-
     // Polishing assembly reads
     racon_1(seqkit.out.id2_ch.collect(), minimap2_2.out.aln2_ch.collect(), flye.out.asmbl_ch.collect())
 
@@ -143,17 +148,26 @@ workflow {
     // Polishing assembly reads
     racon_2(seqkit.out.id2_ch.collect(), minimap2_3.out.aln3_ch.collect(), racon_1.out.polish1_ch.collect())
 
+    // Alignment on polish assembly
+    minimap2_4(racon_2.out.polish2_ch.collect(), seqkit.out.id2_ch.collect())
+
+    // Sorting alignments
+    samtools_2(minimap2_4.out.aln4_ch.collect())
+
     // Polishing assembly reads
-    //medaka(seqkit.out.id2_ch.collect(), racon_2.out.polish2_ch.collect())
+    medaka(samtools_2.out.bam2_ch.collect(), racon_2.out.polish2_ch.collect())
 
     // Quality control of assembly
-    //quast(nexpolish2.out.polish_ch.collect())
+    quast(flye.out.asmbl_ch.collect(), racon_2.out.polish2_ch.collect(), medaka.out.polish3_ch.collect())
 
     // Binning of assembly
-    //semibin(nexpolish2.out.polish_ch.collect())
+    semibin(medaka.out.polish3_ch.collect(), samtools_2.out.bam2_ch.collect())
 
     // Quality control of binning
-    //checkm2(semibin.out.collect())
+    checkm2(semibin.out.binned_ch.collect())
+
+    // Functionnal annotation
+    //prodigal(semibin.out.collect())
 }
 
 /*
