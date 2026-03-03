@@ -2,7 +2,7 @@ process checkm2 {
 
     // label is used to find appropriate resources to use with this task.
     // see conf/resources.conf
-    label 'lowmem'
+    label 'midmem'
 
     // not necessary to include tag section
 
@@ -14,7 +14,7 @@ process checkm2 {
 
     // Workflow input stream
     input:
-        path(binned_ch)
+        path(bins_dir_ch)
 
     // Workflow output stream
     output:
@@ -26,6 +26,6 @@ process checkm2 {
     // Script to execute (located in bin/ sub-directory)
     script:
     """
-    checkm2.sh ${binned_ch} checkm2_out ${task.cpus} ${params.db_checkm2} checkm2.cmd &> checkm2.log 2>&1
+    checkm2.sh ${bins_dir_ch} checkm2_out ${task.cpus} ${params.db_checkm2} checkm2.cmd &> checkm2.log 2>&1
     """
 }

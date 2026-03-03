@@ -8,7 +8,7 @@ process semibin {
 
     // Result files published in Netxtflow result directory.
     // See also 'output' directive, below.
-    publishDir "${params.resultdir}/8-binning/1-semibin",   mode: 'copy', pattern: 'semibin_out/*.fasta'
+    publishDir "${params.resultdir}/8-binning/1-semibin",   mode: 'copy', pattern: '*.fa.gz'
     publishDir "${params.resultdir}/logs/semibin",     mode: 'copy', pattern: 'semibin.log'
     publishDir "${params.outdir}/00_pipeline_info/cmd", mode: 'copy', pattern: 'semibin.cmd'
 
@@ -19,7 +19,8 @@ process semibin {
 
     // Workflow output stream
     output:
-        path("semibin_out/output_bins"), emit: binned_ch
+        path("semibin_out/output_bins"), emit: bins_dir_ch
+	path("semibin_out/output_bins/*.fa.gz"), emit: bins_files_ch
         // we also collect commands executed and log files
         path("semibin.log")
         path("semibin.cmd")

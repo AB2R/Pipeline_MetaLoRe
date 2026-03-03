@@ -21,7 +21,10 @@ Mandatory:
 --model_medaka          [str]   Name of the model
 --env_semibin           [str]   Name of the environment
 --db_checkm2            [path]  Absolute path to checkm2 database
-
+--db_abricate           [str]   Name of the databes used by abricate
+--db_phylophlan         [str]   Name of the databes used by phylophlan
+--diversity_phylophlan  [str]   Parameter for the level of diversity used by phylophlan
+    
 Other options:
 --outdir                [path]	The output directory where the results will be saved.
 -w/--workdir            [path]	The temporary directory where intermediate data will be saved.
@@ -65,6 +68,9 @@ summary['Kraken2 database'] = params.db_kraken
 summary['Model Medaka'] = params.model_medaka
 summary['Environment SemiBin'] = params.env_semibin
 summary['Checkm2 database'] = params.db_checkm2
+summary['Abricate databases'] = params.db_abricate
+summary['Phylophlan database'] = params.db_phylophlan
+summary['Phylophlan diversity'] = params.diversity_phylophlan
 log.info summary.collect { k,v -> "${k.padRight(18)}: $v" }.join("\n")
 log.info "-\033[91m--------------------------------------------------\033[0m-"
 
@@ -95,6 +101,10 @@ include { quast }           from './modules/quast.nf'
 include { semibin }         from './modules/semibin.nf'
 include { checkm2 }         from './modules/checkm2.nf'
 include { prodigal }        from './modules/prodigal.nf'
+include { prokka }          from './modules/prokka.nf'
+include { amrplusplus }     from './modules/amrplusplus.nf'
+include { abricate }        from './modules/abricate.nf'
+include { phylophlan }      from './module/phylophlan.nf'
 
 /*
  * CREATE INPUT CHANNELS
@@ -162,12 +172,28 @@ workflow {
 
     // Binning of assembly
     semibin(medaka.out.polish3_ch.collect(), samtools_2.out.bam2_ch.collect())
+ 
+    // Channel creation for checkm2 and Prokka
+    //bins_dir_ch = semibin.out.binned_ch
+    //bins_files_ch = bins_dir_ch.flatMap { dir -> Channel.fromPath("${dir}/*.fa.gz")}
 
     // Quality control of binning
-    checkm2(semibin.out.binned_ch.collect())
+    checkm2(semibin.out.bins_dir_ch.collect())
 
     // Functionnal annotation
-    //prodigal(semibin.out.collect())
+    prodigal(flye.out.asmbl_ch.collect())
+
+    // Annotation
+    prokka(semibin.out.bins_files_ch.collect())
+
+    // AMR genes research
+    //amrplusplus()
+
+    // ARG research
+    abricate(semibin.out.bins_files_ch.collect())
+
+    // Taxonomy
+    //phylophlan(semibin.out.bins_dir_ch.collect())
 }
 
 /*
