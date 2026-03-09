@@ -22,8 +22,10 @@ Mandatory:
 --env_semibin           [str]   Name of the environment
 --db_checkm2            [path]  Absolute path to checkm2 database
 --db_abricate           [str]   Name of the databes used by abricate
---db_phylophlan         [str]   Name of the databes used by phylophlan
---diversity_phylophlan  [str]   Parameter for the level of diversity used by phylophlan
+--db_megares_path       [path]  Absolute path to initial megares database
+--db_megares_type       [str]   Name of the database type
+--megares_db            [path]  Absolute path to megares database and index
+--mobileOG_db           [path]  Absolute path to mobileOG database and index
     
 Other options:
 --outdir                [path]	The output directory where the results will be saved.
@@ -68,9 +70,11 @@ summary['Kraken2 database'] = params.db_kraken
 summary['Model Medaka'] = params.model_medaka
 summary['Environment SemiBin'] = params.env_semibin
 summary['Checkm2 database'] = params.db_checkm2
-summary['Abricate databases'] = params.db_abricate
+summary['Abricate databases'] = params.db2_abricate
 summary['Phylophlan database'] = params.db_phylophlan
 summary['Phylophlan diversity'] = params.diversity_phylophlan
+summary['Megares database'] = params.megares_db
+summary['MobileOG databases'] = params.mobileOG_db
 log.info summary.collect { k,v -> "${k.padRight(18)}: $v" }.join("\n")
 log.info "-\033[91m--------------------------------------------------\033[0m-"
 
@@ -80,31 +84,35 @@ checkHostname()
 /*
  * IMPORTING MODULES
  */
-include { nanoplot }        from './modules/nanoplot.nf'
-include { porechop_abi }    from './modules/porechop_abi.nf'
-include { nanofilt }        from './modules/nanofilt.nf'
-include { minimap2_1 }      from './modules/minimap2_1.nf'
-include { samtools_1 }      from './modules/samtools_1.nf'
-include { bedtools }        from './modules/bedtools.nf'
-include { kraken2 }         from './modules/kraken2.nf'
-include { collect_read_id } from './modules/collect_read_id.nf'
-include { seqkit }          from './modules/seqkit.nf'
-include { flye }            from './modules/flye.nf'
-include { minimap2_2 }      from './modules/minimap2_2.nf'
-include { racon_1 }         from './modules/racon_1.nf'
-include { minimap2_3 }      from './modules/minimap2_3.nf'
-include { racon_2 }         from './modules/racon_2.nf'
-include { minimap2_4 }      from './modules/minimap2_4.nf'
-include { samtools_2 }      from './modules/samtools_2.nf'
-include { medaka }          from './modules/medaka.nf'
-include { quast }           from './modules/quast.nf'
-include { semibin }         from './modules/semibin.nf'
-include { checkm2 }         from './modules/checkm2.nf'
-include { prodigal }        from './modules/prodigal.nf'
-include { prokka }          from './modules/prokka.nf'
-include { amrplusplus }     from './modules/amrplusplus.nf'
-include { abricate }        from './modules/abricate.nf'
-include { phylophlan }      from './module/phylophlan.nf'
+include { nanoplot }         from './modules/nanoplot.nf'
+include { porechop_abi }     from './modules/porechop_abi.nf'
+include { nanofilt }         from './modules/nanofilt.nf'
+include { minimap2_1 }       from './modules/minimap2_1.nf'
+include { samtools_1 }       from './modules/samtools_1.nf'
+include { bedtools }         from './modules/bedtools.nf'
+include { kraken2 }          from './modules/kraken2.nf'
+include { collect_read_id }  from './modules/collect_read_id.nf'
+include { seqkit }           from './modules/seqkit.nf'
+include { flye }             from './modules/flye.nf'
+include { minimap2_2 }       from './modules/minimap2_2.nf'
+include { racon_1 }          from './modules/racon_1.nf'
+include { minimap2_3 }       from './modules/minimap2_3.nf'
+include { racon_2 }          from './modules/racon_2.nf'
+include { minimap2_4 }       from './modules/minimap2_4.nf'
+include { samtools_2 }       from './modules/samtools_2.nf'
+include { medaka }           from './modules/medaka.nf'
+include { quast }            from './modules/quast.nf'
+include { semibin }          from './modules/semibin.nf'
+include { checkm2 }          from './modules/checkm2.nf'
+include { prodigal }         from './modules/prodigal.nf'
+include { prokka }           from './modules/prokka.nf'
+include { amrplusplus }      from './modules/amrplusplus.nf'
+include { abricate }         from './modules/abricate.nf'
+include { phylophlan }       from './modules/phylophlan.nf'
+include { blast_db_megares } from './modules/blast_db_megares.nf'
+include { blast_megares }    from './modules/blast_megares.nf'
+include { blast_db_mobileOG} from './modules/blast_db_mobileOG.nf'
+include { blast_mobileOG }   from './modules/blast_mobileOG.nf'
 
 /*
  * CREATE INPUT CHANNELS
@@ -173,10 +181,6 @@ workflow {
     // Binning of assembly
     semibin(medaka.out.polish3_ch.collect(), samtools_2.out.bam2_ch.collect())
  
-    // Channel creation for checkm2 and Prokka
-    //bins_dir_ch = semibin.out.binned_ch
-    //bins_files_ch = bins_dir_ch.flatMap { dir -> Channel.fromPath("${dir}/*.fa.gz")}
-
     // Quality control of binning
     checkm2(semibin.out.bins_dir_ch.collect())
 
@@ -194,6 +198,18 @@ workflow {
 
     // Taxonomy
     //phylophlan(semibin.out.bins_dir_ch.collect())
+
+    // Megares database Idexation
+    blast_db_megares(params.db_megares_path)
+
+    // ARG research
+    blast_megares(semibin.out.bins_files_ch.collect(), params.megares_db)
+
+    // MobileOG database Idexation
+    blast_db_mobileOG(params.db_mobileOG_path)
+
+    // MGE research
+    blast_mobileOG(semibin.out.bins_files_ch.collect(), params.mobileOG_db)
 }
 
 /*

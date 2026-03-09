@@ -3,6 +3,7 @@ process prokka {
     // label is used to find appropriate resources to use with this task.
     // see conf/resources.conf
     label 'lowmem'
+    maxForks 1
 
     // not necessary to include tag section
 
