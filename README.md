@@ -17,14 +17,51 @@ Pipeline for microbial flora and atibiotics resistance caracterisation
 NanoPlot is a visualization tool used to assess the quality of long-read sequencing data by generating plots and summary statistics such as read length distributions and quality scores. For this tool we used this biocontainer.
 
 
-Input :
+- **Input** :
 
-Output :
+- **Output** :
 
-Commandline : 
+- **Commandline** : 
 
 #### 2. Trimming and Filtering
 ##### 2.1 Porechop-ABI
 
+- **Input** :
+
+- **Output** :
+
+- **Commandline** :
 
 ##### 2.2 NanoFilt
+
+- **Input** :
+
+- **Output** :
+
+- **Commandline** :
+
+#### 3. Alignment
+##### 3.1 Minimap2
+
+- **Input** :
+
+- **Output** :
+
+- **Commandline** :
+
+##### 3.2 Samtools
+
+- **Input** :
+
+- **Output** :
+
+- **Commandline** :
+
+##### 3.3 Bedtools
+
+- **Input** :
+
+- **Output** :
+
+- **Commandline** :
+
