@@ -8,7 +8,7 @@ process medaka {
 
     // Result files published in Netxtflow result directory.
     // See also 'output' directive, below.
-    publishDir "${params.resultdir}/7-polishing/1-medaka",   mode: 'copy', pattern: '*.fasta'
+    publishDir "${params.resultdir}/7-polishing/1-medaka",   mode: 'copy', pattern: 'medaka_out/*.fasta'
     publishDir "${params.resultdir}/logs/medaka",     mode: 'copy', pattern: 'medaka.log'
     publishDir "${params.outdir}/00_pipeline_info/cmd", mode: 'copy', pattern: 'medaka.cmd'
 

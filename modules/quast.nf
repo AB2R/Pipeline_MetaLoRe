@@ -8,8 +8,7 @@ process quast {
 
     // Result files published in Netxtflow result directory.
     // See also 'output' directive, below.
-    publishDir "${params.resultdir}/7-polishing/5-quast",   mode: 'copy', pattern: 'report.txt'
-    publishDir "${params.resultdir}/7-polishing/25-quast",   mode: 'copy', pattern: 'report.html'
+    publishDir "${params.resultdir}/7-polishing/5-quast",   mode: 'copy', pattern: 'quast_out'
     publishDir "${params.resultdir}/logs/quast",     mode: 'copy', pattern: 'quast.log'
     publishDir "${params.outdir}/00_pipeline_info/cmd", mode: 'copy', pattern: 'quast.cmd'
 
@@ -21,8 +20,7 @@ process quast {
 
     // Workflow output stream
     output:
-        path("quast_out/report.txt")
-	path("quast_out/report.html")
+        path("quast_out")
         // we also collect commands executed and log files
         path("quast.log")
         path("quast.cmd")
