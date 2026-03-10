@@ -106,7 +106,6 @@ include { semibin }          from './modules/semibin.nf'
 include { checkm2 }          from './modules/checkm2.nf'
 include { prodigal }         from './modules/prodigal.nf'
 include { prokka }           from './modules/prokka.nf'
-include { amrplusplus }      from './modules/amrplusplus.nf'
 include { abricate }         from './modules/abricate.nf'
 include { phylophlan }       from './modules/phylophlan.nf'
 include { blast_db_megares } from './modules/blast_db_megares.nf'
@@ -189,9 +188,6 @@ workflow {
 
     // Annotation
     prokka(semibin.out.bins_files_ch.collect())
-
-    // AMR genes research
-    //amrplusplus()
 
     // ARG research
     abricate(semibin.out.bins_files_ch.collect())
