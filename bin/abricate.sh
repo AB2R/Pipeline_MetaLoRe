@@ -8,14 +8,15 @@ DB3=${args[2]}
 DB4=${args[3]}
 DB5=${args[4]}
 LOGCMD=${args[5]}
+BASENAME=$(basename ${FASTA_FILE} .fa)
 
 # Commande to execute
-CMD1="abricate ${FASTA_FILE} > results_ncbi.tab"
-CMD2="abricate --db ${DB2} ${FASTA_FILE} > results_${DB2}.tab"
-CMD3="abricate --db ${DB3} ${FASTA_FILE} > results_${DB3}.tab"
-CMD4="abricate --db ${DB4} ${FASTA_FILE} > results_${DB4}.tab"
-CMD5="abricate --db ${DB5} ${FASTA_FILE} > results_${DB5}.tab"
-CMD6="abricate --summary results_ncbi.tab results_${DB2}.tab results_${DB3}.tab results_${DB4}.tab results_${DB5}.tab"
+CMD1="abricate ${FASTA_FILE} > ${BASENAME}_results_ncbi.tab"
+CMD2="abricate --db ${DB2} ${FASTA_FILE} > ${BASENAME}_results_${DB2}.tab"
+CMD3="abricate --db ${DB3} ${FASTA_FILE} > ${BASENAME}_results_${DB3}.tab"
+CMD4="abricate --db ${DB4} ${FASTA_FILE} > ${BASENAME}_results_${DB4}.tab"
+CMD5="abricate --db ${DB5} ${FASTA_FILE} > ${BASENAME}_results_${DB5}.tab"
+CMD6="abricate --summary *results_ncbi.tab *results_${DB2}.tab *results_${DB3}.tab *results_${DB4}.tab *results_${DB5}.tab"
 
 # Save command in log
 echo ${CMD1} >> ${LOGCMD}

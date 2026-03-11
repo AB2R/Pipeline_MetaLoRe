@@ -26,6 +26,8 @@ Mandatory:
 --db_megares_type       [str]   Name of the database type
 --megares_db            [path]  Absolute path to megares database and index
 --mobileOG_db           [path]  Absolute path to mobileOG database and index
+--db_plasmidfinder      [path}  Absolute path to plasmidfinder database and index
+--gtdbtk_db             [path]  Absolute path to gtdbtk database
     
 Other options:
 --outdir                [path]	The output directory where the results will be saved.
@@ -74,7 +76,9 @@ summary['Abricate databases'] = params.db2_abricate
 summary['Phylophlan database'] = params.db_phylophlan
 summary['Phylophlan diversity'] = params.diversity_phylophlan
 summary['Megares database'] = params.megares_db
-summary['MobileOG databases'] = params.mobileOG_db
+summary['MobileOG database'] = params.mobileOG_db
+summary['Plasmidfinder database'] = params.plasmidfinder_db
+summary['Gtdbtk database'] = params.gtdbtk_db
 log.info summary.collect { k,v -> "${k.padRight(18)}: $v" }.join("\n")
 log.info "-\033[91m--------------------------------------------------\033[0m-"
 
@@ -112,6 +116,9 @@ include { blast_db_megares } from './modules/blast_db_megares.nf'
 include { blast_megares }    from './modules/blast_megares.nf'
 include { blast_db_mobileOG} from './modules/blast_db_mobileOG.nf'
 include { blast_mobileOG }   from './modules/blast_mobileOG.nf'
+include { blast_db_plasmidfinder } from './modules/blast_db_plasmidfinder.nf'
+include { blast_plasmidfinder }    from './modules/blast_plasmidfinder.nf'
+include { gtdbtk }           from './modules/gtdbtk.nf'
 
 /*
  * CREATE INPUT CHANNELS
@@ -195,17 +202,26 @@ workflow {
     // Taxonomy
     //phylophlan(semibin.out.bins_dir_ch.collect())
 
-    // Megares database Idexation
+    // Megares database Indexation
     blast_db_megares(params.db_megares_path)
 
     // ARG research
     blast_megares(semibin.out.bins_files_ch.collect(), params.megares_db)
 
-    // MobileOG database Idexation
+    // MobileOG database Indexation
     blast_db_mobileOG(params.db_mobileOG_path)
 
     // MGE research
     blast_mobileOG(semibin.out.bins_files_ch.collect(), params.mobileOG_db)
+
+    // Plasmidfinder database Indexation
+    blast_db_plasmidfinder(params.db_plasmidfinder_path)
+
+    // Plsmids research
+    blast_plasmidfinder(semibin.out.bins_files_ch.collect(), params.plasmidfinder_db)
+
+    // Taxonomy
+    //gtdbtk(semibin.out.bins_files_ch.collect(), params.gtdbtk_db)
 }
 
 /*
