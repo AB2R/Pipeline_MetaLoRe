@@ -8,6 +8,14 @@ Pipeline for microbial flora and atibiotics resistance caracterisation
 ### A-Pipeline overview
 
 ### B-Compute requirements
+Before running the entire pipeline, you need some requirements.
+
+#### PlasmidFinder requirements
+Run this command line in your databases repertory :
+
+`git clone https://bitbucket.org/genomicepidemiology/plasmidfinder_db.git
+cd plasmidfinder_db
+cat *.fsa > plasmidfinder_all.fasta`
 
 ### C-Data
 
@@ -17,11 +25,12 @@ Pipeline for microbial flora and atibiotics resistance caracterisation
 NanoPlot is a visualization tool used to assess the quality of long-read sequencing data by generating plots and summary statistics such as read length distributions and quality scores. For this tool we used this biocontainer.
 
 
-- **Input** :
+- **Input** : Oxford Nanopore Technology data files (fastq) 
 
-- **Output** :
+- **Output** : quality control report (html)
 
 - **Commandline** : 
+`NanoPlot -t ${NCPUS} --fastq ${FASTQ_FILE} -o nano_${FASTQ_FILE%%.*}`
 
 #### 2. Trimming and Filtering
 ##### 2.1 Porechop-ABI
