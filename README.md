@@ -13,9 +13,13 @@ Before running the entire pipeline, you need some requirements.
 #### PlasmidFinder requirements
 Run this command line in your databases repertory :
 
-`git clone https://bitbucket.org/genomicepidemiology/plasmidfinder_db.git
+```
+#Clone database from git repository
+git clone https://bitbucket.org/genomicepidemiology/plasmidfinder_db.git
 cd plasmidfinder_db
-cat *.fsa > plasmidfinder_all.fasta`
+#Concatenate all the databases
+cat *.fsa > plasmidfinder_all.fasta
+```
 
 ### C-Data
 
