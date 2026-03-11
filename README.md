@@ -5,12 +5,12 @@ Pipeline for microbial flora and atibiotics resistance caracterisation
 
 ## Table of contents
 
-### A-Pipeline overview
-
-### B-Compute requirements
+## A-Pipeline overview
+![Pipeline](images/Pipeline_MetaLoRe.png)
+## B-Compute requirements
 Before running the entire pipeline, you need some requirements.
 
-#### PlasmidFinder requirements
+### PlasmidFinder requirements
 Run this command line in your databases repertory :
 
 ```
@@ -21,11 +21,11 @@ cd plasmidfinder_db
 cat *.fsa > plasmidfinder_all.fasta
 ```
 
-### C-Data
+## C-Data
 
-### D-Tools
-#### 1.Quality control
-##### 1.1 NanoPlot (v.1.28.4)
+## D-Tools
+### 1.Quality control
+#### 1.1 NanoPlot (v.1.28.4)
 NanoPlot is a visualization tool used to assess the quality of long-read sequencing data by generating plots and summary statistics such as read length distributions and quality scores. For this tool we used this biocontainer.
 
 - **Input** : Oxford Nanopore Technology data files (fastq) *ONT_ch*
@@ -35,8 +35,8 @@ NanoPlot is a visualization tool used to assess the quality of long-read sequenc
 - **Commandline** : 
 `NanoPlot -t ${NCPUS} --fastq ${FASTQ_FILE} -o $(basename ${FASTQ_FILE%%.*})_nanoqc`
 
-#### 2. Trimming and Filtering
-##### 2.1 Porechop-ABI
+### 2. Trimming and Filtering
+#### 2.1 Porechop-ABI
 Porechop_ABI is a tool used to process adapter sequences in ONT reads.
 
 - **Input** : Oxford Nanopore Technology data files (fastq) *ONT_ch*
@@ -46,7 +46,7 @@ Porechop_ABI is a tool used to process adapter sequences in ONT reads.
 - **Commandline** :
 `porechop_abi -abi -t ${NCPUS} -i ${FASTQ_FILE} -o $(basename ${FASTQ_FILE%%.*})_trim.fastq`
 
-##### 2.2 NanoFilt
+#### 2.2 NanoFilt
 NanoFilt is a tool used to filtering reads of long-read sequencing data on quality and/or read length, and optional trimming after passing filters.
 
 - **Input** : Trimmed Oxford Nanopore Technology data files (fastq) *trim_ch*
@@ -56,8 +56,8 @@ NanoFilt is a tool used to filtering reads of long-read sequencing data on quali
 - **Commandline** :
 `cat ${FASTQ_FILE} | NanoFilt -l ${MIN_READ_LENGTH} -q ${QUALITY} > $(basename ${FASTQ_FILE%%_*})_filt.fastq`
 
-#### 3. Alignment
-##### 3.1 Minimap2
+### 3. Alignment
+#### 3.1 Minimap2
 
 - **Input** : Filtered Oxford Nanopore Technology data files (fastq) *filt_ch*
 
@@ -66,7 +66,7 @@ NanoFilt is a tool used to filtering reads of long-read sequencing data on quali
 - **Commandline** :
 `minimap2 -ax map-ont ${REF} ${FASTQ_FILE} > $(basename ${FASTQ_FILE%%_*})_aln.sam`
 
-##### 3.2 Samtools
+#### 3.2 Samtools
 
 - **Input** : Aligned Oxford Nanopore Technology data files (sam) *aln_ch*
 
@@ -76,7 +76,7 @@ NanoFilt is a tool used to filtering reads of long-read sequencing data on quali
 `samtools view -bS -@ ${NCPUS} -f 4 ${FASTQ_FILE} > $(basename ${FASTQ_FILE%%_*})_unmaped.bam`
 `samtools sort -@ ${NCPUS} -n $(basename ${FASTQ_FILE%%_*})_unmaped.bam -o $(basename ${FASTQ_FILE%%_*})_sorted.bam`
 
-##### 3.3 Bedtools
+#### 3.3 Bedtools
 
 - **Input** : Sorted of unmaped Oxford Nanopore Technology data files (bam) *sorted_ch*
 
