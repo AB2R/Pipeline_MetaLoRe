@@ -28,53 +28,60 @@ cat *.fsa > plasmidfinder_all.fasta
 ##### 1.1 NanoPlot (v.1.28.4)
 NanoPlot is a visualization tool used to assess the quality of long-read sequencing data by generating plots and summary statistics such as read length distributions and quality scores. For this tool we used this biocontainer.
 
-
-- **Input** : Oxford Nanopore Technology data files (fastq) 
+- **Input** : Oxford Nanopore Technology data files (fastq) *ONT_ch*
 
 - **Output** : quality control report (html)
 
 - **Commandline** : 
-`NanoPlot -t ${NCPUS} --fastq ${FASTQ_FILE} -o nano_${FASTQ_FILE%%.*}`
+`NanoPlot -t ${NCPUS} --fastq ${FASTQ_FILE} -o $(basename ${FASTQ_FILE%%.*})_nanoqc`
 
 #### 2. Trimming and Filtering
 ##### 2.1 Porechop-ABI
+Porechop_ABI is a tool used to process adapter sequences in ONT reads.
 
-- **Input** :
+- **Input** : Oxford Nanopore Technology data files (fastq) *ONT_ch*
 
-- **Output** :
+- **Output** : Trimmed Oxford Nanopore Technology data files (fastq) *trim_ch*
 
 - **Commandline** :
+`porechop_abi -abi -t ${NCPUS} -i ${FASTQ_FILE} -o $(basename ${FASTQ_FILE%%.*})_trim.fastq`
 
 ##### 2.2 NanoFilt
+NanoFilt is a tool used to filtering reads of long-read sequencing data on quality and/or read length, and optional trimming after passing filters.
 
-- **Input** :
+- **Input** : Trimmed Oxford Nanopore Technology data files (fastq) *trim_ch*
 
-- **Output** :
+- **Output** : Filtered Oxford Nanopore Technology data files (fastq) *filt_ch*
 
 - **Commandline** :
+`cat ${FASTQ_FILE} | NanoFilt -l ${MIN_READ_LENGTH} -q ${QUALITY} > $(basename ${FASTQ_FILE%%_*})_filt.fastq`
 
 #### 3. Alignment
 ##### 3.1 Minimap2
 
-- **Input** :
+- **Input** : Filtered Oxford Nanopore Technology data files (fastq) *filt_ch*
 
-- **Output** :
+- **Output** : Aligned Oxford Nanopore Technology data files (sam) *aln_ch*
 
 - **Commandline** :
+`minimap2 -ax map-ont ${REF} ${FASTQ_FILE} > $(basename ${FASTQ_FILE%%_*})_aln.sam`
 
 ##### 3.2 Samtools
 
-- **Input** :
+- **Input** : Aligned Oxford Nanopore Technology data files (sam) *aln_ch*
 
-- **Output** :
+- **Output** : Sorted of unmaped Oxford Nanopore Technology data files (bam) *sorted_ch*
 
 - **Commandline** :
+`samtools view -bS -@ ${NCPUS} -f 4 ${FASTQ_FILE} > $(basename ${FASTQ_FILE%%_*})_unmaped.bam`
+`samtools sort -@ ${NCPUS} -n $(basename ${FASTQ_FILE%%_*})_unmaped.bam -o $(basename ${FASTQ_FILE%%_*})_sorted.bam`
 
 ##### 3.3 Bedtools
 
-- **Input** :
+- **Input** : Sorted of unmaped Oxford Nanopore Technology data files (bam) *sorted_ch*
 
-- **Output** :
+- **Output** : Fitted Oxford Nanopore Technology data files (fastq) *fitted_ch*
 
 - **Commandline** :
+`bedtools bamtofastq -i ${FASTQ_FILE} -fq $(basename ${FASTQ_FILE%%_*})_fitted.fastq`
 
