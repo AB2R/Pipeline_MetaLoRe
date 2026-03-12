@@ -15,10 +15,12 @@ Before running the entire pipeline, you need some requirements.
 Download the database for CheckM2 using this link :
 [CheckM2 database](https://zenodo.org/record/14897628)
 
-Create a repertory 
+Create a repertory on the cluster :  
+ 
 `mkdir databases/CheckM2_database`
 
-Load the database on the cluster with this command line :
+Load the database on the cluster with this command line :  
+
 `scp path/of/the/database/on/your/computer username@genossh.genouest.org:/path/on/the/cluster`
 
 Extract the database :
@@ -31,20 +33,24 @@ gunzip database_name
 Download the database Megares (All sequences) using this link :
 [Megares database](https://www.meglab.org/megares/download/)
 
-Create a repertory
+Create a repertory on the cluster :  
+
 `mkdir databases/Megares_database`
 
-Load the database on the cluster with this command line :
+Load the database on the cluster with this command line :  
+
 `scp path/of/the/database/on/your/computer username@genossh.genouest.org:/path/on/the/cluster`
 
 ### Mobile-OG
 Download the database Mobile-OG (Beatrix 1.6 v1) using this link :
 [Mobile-OG database](https://mobileogdb.flsi.cloud.vt.edu/entries/database_download)
 
-Create a repertory
+Create a repertory on the cluster :  
+
 `mkdir databases/Mobile-OG_database`
 
-Load the database on the cluster with this command line :
+Load the database on the cluster with this command line :  
+
 `scp path/of/the/database/on/your/computer username@genossh.genouest.org:/path/on/the/cluster`
 
 Extract the database :
