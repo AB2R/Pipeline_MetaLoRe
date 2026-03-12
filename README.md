@@ -85,7 +85,9 @@ NanoPlot is a visualization tool used to assess the quality of long-read sequenc
 
 - **Commandline** :  
  
-`NanoPlot -t ${NCPUS} --fastq ${FASTQ_FILE} -o $(basename ${FASTQ_FILE%%.*})_nanoqc`
+```
+NanoPlot -t ${NCPUS} --fastq ${FASTQ_FILE} -o $(basename ${FASTQ_FILE%%.*})_nanoqc
+```
 
 ### 2. Trimming and Filtering
 #### 2.1 Porechop-ABI
@@ -97,7 +99,9 @@ Porechop_ABI is a tool used to process adapter sequences in ONT reads. For this 
 
 - **Commandline** :  
 
-`porechop_abi -abi -t ${NCPUS} -i ${FASTQ_FILE} -o $(basename ${FASTQ_FILE%%.*})_trim.fastq`
+```
+porechop_abi -abi -t ${NCPUS} -i ${FASTQ_FILE} -o $(basename ${FASTQ_FILE%%.*})_trim.fastq
+```
 
 #### 2.2 NanoFilt
 NanoFilt is a tool used to filtering reads of long-read sequencing data on quality and/or read length, and optional trimming after passing filters. For this tool we used this [biocontainer](https://quay.io/repository/biocontainers/nanofilt?tab=tags&tag=1.1.3--py35_0)
@@ -108,7 +112,9 @@ NanoFilt is a tool used to filtering reads of long-read sequencing data on quali
 
 - **Commandline** :  
 
-`cat ${FASTQ_FILE} | NanoFilt -l ${MIN_READ_LENGTH} -q ${QUALITY} > $(basename ${FASTQ_FILE%%_*})_filt.fastq`
+```
+cat ${FASTQ_FILE} | NanoFilt -l ${MIN_READ_LENGTH} -q ${QUALITY} > $(basename ${FASTQ_FILE%%_*})_filt.fastq
+```
 
 ### 3. Alignment
 #### 3.1 Minimap2
@@ -119,7 +125,9 @@ NanoFilt is a tool used to filtering reads of long-read sequencing data on quali
 
 - **Commandline** :  
 
-`minimap2 -ax map-ont ${REF} ${FASTQ_FILE} > $(basename ${FASTQ_FILE%%_*})_aln.sam`
+```
+minimap2 -ax map-ont ${REF} ${FASTQ_FILE} > $(basename ${FASTQ_FILE%%_*})_aln.sam
+```
 
 #### 3.2 Samtools
 
@@ -129,9 +137,10 @@ NanoFilt is a tool used to filtering reads of long-read sequencing data on quali
 
 - **Commandline** :  
 
-`samtools view -bS -@ ${NCPUS} -f 4 ${FASTQ_FILE} > $(basename ${FASTQ_FILE%%_*})_unmaped.bam`  
-
-`samtools sort -@ ${NCPUS} -n $(basename ${FASTQ_FILE%%_*})_unmaped.bam -o $(basename ${FASTQ_FILE%%_*})_sorted.bam`
+```
+samtools view -bS -@ ${NCPUS} -f 4 ${FASTQ_FILE} > $(basename ${FASTQ_FILE%%_*})_unmaped.bam
+samtools sort -@ ${NCPUS} -n $(basename ${FASTQ_FILE%%_*})_unmaped.bam -o $(basename ${FASTQ_FILE%%_*})_sorted.bam
+```
 
 #### 3.3 Bedtools
 
@@ -141,7 +150,9 @@ NanoFilt is a tool used to filtering reads of long-read sequencing data on quali
 
 - **Commandline** :  
 
-`bedtools bamtofastq -i ${FASTQ_FILE} -fq $(basename ${FASTQ_FILE%%_*})_fitted.fastq`
+```
+bedtools bamtofastq -i ${FASTQ_FILE} -fq $(basename ${FASTQ_FILE%%_*})_fitted.fastq
+```
 
 ### 4. Taxonomic classification
 #### 4.1 Kraken2
@@ -151,7 +162,9 @@ NanoFilt is a tool used to filtering reads of long-read sequencing data on quali
 - **Output** : Taxonomic reads classification (html, kraken) *kraken_ch* 
 
 - **Commandline** :  
-`kraken2 --threads ${NCPUS} --db ${DB_KRAKEN} --report $(basename ${FASTQ_FILE%%_*}).report --output $(basename ${FASTQ_FILE%%_*}).kraken --use-names ${FASTQ_FILE}`
+```
+kraken2 --threads ${NCPUS} --db ${DB_KRAKEN} --report $(basename ${FASTQ_FILE%%_*}).report --output $(basename ${FASTQ_FILE%%_*}).kraken --use-names ${FASTQ_FILE}
+```
 
 #### 4.2 Python script collect_read_id.py
 
@@ -169,7 +182,9 @@ NanoFilt is a tool used to filtering reads of long-read sequencing data on quali
 
 - **Commandline** :  
 
-`seqkit grep -f ${ID_FILE} ${FASTQ_FILE} -o $(basename ${FASTQ_FILE%%_*})_filtid.fastq`
+```
+seqkit grep -f ${ID_FILE} ${FASTQ_FILE} -o $(basename ${FASTQ_FILE%%_*})_filtid.fastq
+```
 
 ### 5. Assembly
 #### 5.1 Flye
@@ -179,4 +194,6 @@ NanoFilt is a tool used to filtering reads of long-read sequencing data on quali
 - **Output** : Assembly reads (fasta) *asmbl_ch*
 
 - **Commandline** :  
-`flye --nano-raw ${FASTQ_FILE} --out-dir ${OUT_DIR} --threads ${NCPUS} --meta`
+```
+flye --nano-raw ${FASTQ_FILE} --out-dir ${OUT_DIR} --threads ${NCPUS} --meta
+```
