@@ -6,7 +6,7 @@ FASTQ_FILE=${args[0]}
 LOGCMD=${args[1]}
 
 # Commande to execute
-CMD="bedtools bamtofastq -i ${FASTQ_FILE} -fq fitted_${FASTQ_FILE%%.*}.fastq"
+CMD="bedtools bamtofastq -i ${FASTQ_FILE} -fq ${FASTQ_FILE%%_*}_fitted.fastq"
 
 # Save command in log
 echo ${CMD} > ${LOGCMD}

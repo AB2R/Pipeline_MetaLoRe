@@ -8,7 +8,7 @@ QUALITY=${args[2]}
 LOGCMD=${args[3]}
 
 # Commande to execute
-CMD="cat ${FASTQ_FILE} | NanoFilt -l ${MIN_READ_LENGTH} -q ${QUALITY} > filt_${FASTQ_FILE%%.*}.fastq"
+CMD="cat ${FASTQ_FILE} | NanoFilt -l ${MIN_READ_LENGTH} -q ${QUALITY} > $(basename ${FASTQ_FILE%%_*})_filt.fastq"
 
 # Save command in log
 echo ${CMD} > ${LOGCMD}
