@@ -8,7 +8,7 @@ process nanoplot {
     
     // Result files published in Netxtflow result directory.
     // See also 'output' directive, below.
-    publishDir "${params.resultdir}/1-qc/1-nanoplot",	mode: 'copy', pattern: 'nano_*'
+    publishDir "${params.resultdir}/1-qc/1-nanoplot",	mode: 'copy', pattern: '*_nanoqc*'
     publishDir "${params.resultdir}/logs/nanoplot",	mode: 'copy', pattern: 'nanoplot.log'
     publishDir "${params.outdir}/00_pipeline_info/cmd",	mode: 'copy', pattern: 'nanoplot.cmd'
     
@@ -18,7 +18,7 @@ process nanoplot {
 
     // Workflow output stream
     output:
-        path("nano_*")
+        path("*_nanoqc*")
         // we also collect commands executed and log files
         path("nanoplot.log")
         path("nanoplot.cmd")
