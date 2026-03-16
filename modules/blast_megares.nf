@@ -19,7 +19,7 @@ process blast_megares {
 
     // Workflow output stream
     output:
-        path("*.tab")
+        path("*.tab"), emit: megares_ch
         // we also collect commands executed and log files
         path("blast_megares.log")
         path("blast_megares.cmd")

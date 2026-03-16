@@ -19,7 +19,7 @@ process blast_mobileOG {
 
     // Workflow output stream
     output:
-        path("*.tab")
+        path("*.tab"), emit: mobileOG_ch
         // we also collect commands executed and log files
         path("blast_mobileOG.log")
         path("blast_mobileOG.cmd")

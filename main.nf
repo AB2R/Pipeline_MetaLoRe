@@ -119,6 +119,8 @@ include { blast_mobileOG }   from './modules/blast_mobileOG.nf'
 include { blast_db_plasmidfinder } from './modules/blast_db_plasmidfinder.nf'
 include { blast_plasmidfinder }    from './modules/blast_plasmidfinder.nf'
 include { gtdbtk }           from './modules/gtdbtk.nf'
+include { filtration_blast_megares } from './modules/filtration_blast_megares'
+include { filtration_blast_mobileOG } from './modules/filtration_blast_mobileOG.nf'
 
 /*
  * CREATE INPUT CHANNELS
@@ -222,6 +224,12 @@ workflow {
 
     // Taxonomy
     //gtdbtk(semibin.out.bins_files_ch.collect(), params.gtdbtk_db)
+
+    // Filtration of Blast + Megares results
+    filtration_blast_megares(blast_megares.out.megares_ch.collect())
+
+    // Filtration of Blast + MobileOG results
+    filtration_blast_mobileOG(blast_mobileOG.out.mobileOG_ch.collect())
 }
 
 /*
