@@ -86,7 +86,27 @@ NanoPlot is a visualization tool used to assess the quality of long-read sequenc
 - **Commandline** :  
  
 ```
-NanoPlot -t ${NCPUS} --fastq ${FASTQ_FILE} -o $(basename ${FASTQ_FILE%%.*})_nanoqc
+NanoPlot -t ${cpus} --fastq ${fastq} -o ${output}
+```
+
+#### 1.2 Quast (v.5.3.0)
+
+- **Input** :
+
+- **Output** :
+
+- **Commandline** :
+```
+```
+
+#### 1.3 CheckM2 
+
+- **Input** :
+
+- **Output** :
+
+- **Commandline** :
+```
 ```
 
 ### 2. Trimming and Filtering
@@ -100,7 +120,7 @@ Porechop_ABI is a tool used to process adapter sequences in ONT reads. For this 
 - **Commandline** :  
 
 ```
-porechop_abi -abi -t ${NCPUS} -i ${FASTQ_FILE} -o $(basename ${FASTQ_FILE%%.*})_trim.fastq
+porechop_abi -abi -t ${cpus} -i ${fastq} -o ${output}
 ```
 
 #### 2.2 NanoFilt
@@ -113,10 +133,10 @@ NanoFilt is a tool used to filtering reads of long-read sequencing data on quali
 - **Commandline** :  
 
 ```
-cat ${FASTQ_FILE} | NanoFilt -l ${MIN_READ_LENGTH} -q ${QUALITY} > $(basename ${FASTQ_FILE%%_*})_filt.fastq
+cat ${fastq} | NanoFilt -l ${minimum_read_lenght} -q ${quality} > ${output}
 ```
 
-### 3. Alignment
+### 3. Alignment (optional : only if the host genome is known)
 #### 3.1 Minimap2
 
 - **Input** : Filtered Oxford Nanopore Technology data files (fastq) *filt_ch*
@@ -126,7 +146,7 @@ cat ${FASTQ_FILE} | NanoFilt -l ${MIN_READ_LENGTH} -q ${QUALITY} > $(basename ${
 - **Commandline** :  
 
 ```
-minimap2 -ax map-ont ${REF} ${FASTQ_FILE} > $(basename ${FASTQ_FILE%%_*})_aln.sam
+minimap2 -ax map-ont ${reference} ${fastq} > ${output}
 ```
 
 #### 3.2 Samtools
@@ -138,8 +158,8 @@ minimap2 -ax map-ont ${REF} ${FASTQ_FILE} > $(basename ${FASTQ_FILE%%_*})_aln.sa
 - **Commandline** :  
 
 ```
-samtools view -bS -@ ${NCPUS} -f 4 ${FASTQ_FILE} > $(basename ${FASTQ_FILE%%_*})_unmaped.bam
-samtools sort -@ ${NCPUS} -n $(basename ${FASTQ_FILE%%_*})_unmaped.bam -o $(basename ${FASTQ_FILE%%_*})_sorted.bam
+samtools view -bS -@ ${cpus} -f 4 ${fastq} > ${output}
+samtools sort -@ ${cpus} -n ${ouput_samtools_view} -o ${output}
 ```
 
 #### 3.3 Bedtools
@@ -151,7 +171,7 @@ samtools sort -@ ${NCPUS} -n $(basename ${FASTQ_FILE%%_*})_unmaped.bam -o $(base
 - **Commandline** :  
 
 ```
-bedtools bamtofastq -i ${FASTQ_FILE} -fq $(basename ${FASTQ_FILE%%_*})_fitted.fastq
+bedtools bamtofastq -i ${fastq} -fq ${output}
 ```
 
 ### 4. Taxonomic classification
@@ -163,7 +183,7 @@ bedtools bamtofastq -i ${FASTQ_FILE} -fq $(basename ${FASTQ_FILE%%_*})_fitted.fa
 
 - **Commandline** :  
 ```
-kraken2 --threads ${NCPUS} --db ${DB_KRAKEN} --report $(basename ${FASTQ_FILE%%_*}).report --output $(basename ${FASTQ_FILE%%_*}).kraken --use-names ${FASTQ_FILE}
+kraken2 --threads ${cpus} --db ${kraken_database} --report ${report_output_name} --output ${output} --use-names ${fastq}
 ```
 
 #### 4.2 Python script collect_read_id.py
@@ -183,7 +203,7 @@ kraken2 --threads ${NCPUS} --db ${DB_KRAKEN} --report $(basename ${FASTQ_FILE%%_
 - **Commandline** :  
 
 ```
-seqkit grep -f ${ID_FILE} ${FASTQ_FILE} -o $(basename ${FASTQ_FILE%%_*})_filtid.fastq
+seqkit grep -f ${ID_file} ${fastq} -o ${output}
 ```
 
 ### 5. Assembly
@@ -195,5 +215,86 @@ seqkit grep -f ${ID_FILE} ${FASTQ_FILE} -o $(basename ${FASTQ_FILE%%_*})_filtid.
 
 - **Commandline** :  
 ```
-flye --nano-raw ${FASTQ_FILE} --out-dir ${OUT_DIR} --threads ${NCPUS} --meta
+flye --nano-raw ${fastq} --out-dir ${output_directory} --threads ${cpus} --meta
+```
+
+### 6. Polishing
+#### 6.1 Racon
+
+- **Input** :
+
+- **Output** :
+
+- **Commandline** :
+```
+racon ${fastq} ${sam} ${fasta} -t ${cpus} > racon.fasta
+```
+
+#### 6.2 Medaka
+
+- **Input** :
+
+- **Output** :
+
+- **Commandline** :
+```
+medaka_consensus -i ${fastq} -d ${fasta} -t ${cpus} -o ${output_directory} -m ${modele}
+```
+
+### 7. Binning
+#### 7.1 Semibin2
+
+- **Input** :
+
+- **Output** :
+
+- **Commandline** :
+```
+SemiBin2 single_easy_bin -i  ${fasta} -b ${bam} -o ${output_directory} --threads ${cpus} --environment ${env}
+```
+
+### 8. Annotation
+#### 8.1 Prodigale 
+
+- **Input** :
+
+- **Output** :
+
+- **Commandline** :
+```
+prodigal -i ${fasta} -a ${output}.faa -d ${output}.fna -o ${output}.gff -p meta
+```
+
+#### 8.2 Prokka
+
+- **Input** :
+
+- **Output** :
+
+- **Commandline** :
+```
+prokka --metagenome --outdir ${output_directory} ${fasta}
+```
+
+### 9. ARG/BEG/MGE research
+#### 9.1 Abricate
+
+- **Input** :
+
+- **Output** :
+
+- **Commandline** :
+```
+abricate --db ${database} ${fasta} > ${output}
+```
+
+#### 9.2 Blast
+
+- **Input** :
+
+- **Output** :
+
+- **Commandline** :
+```
+blastn -query ${fasta} -db ${database} -out ${output} -outfmt 6
 ```
