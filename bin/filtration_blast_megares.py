@@ -16,7 +16,15 @@ def main():
         for line in infile:
             cols = line.strip().split("\t")
 
-            if len(cols) > 1:
+            if len(cols) > 2:
+                pident = float(cols[2])
+                if pident < 90:
+                    continue
+
+                length_align = float(cols[3])
+                if length_align < 100:
+                    continue
+
                 parts = cols[1].split("|")
 
                 if parts[1] in ["Drugs", "Metals"] \
