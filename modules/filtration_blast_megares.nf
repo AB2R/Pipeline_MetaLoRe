@@ -18,7 +18,7 @@ process filtration_blast_megares {
 
     // Workflow output stream
     output:
-        path("*.tab")
+        path("*.tab"), emit: filt_megares_ch
         // we also collect commands executed and log files
         path("filtration_blast_megares.log")
 

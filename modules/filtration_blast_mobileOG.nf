@@ -18,7 +18,7 @@ process filtration_blast_mobileOG {
 
     // Workflow output stream
     output:
-        path("*.tab")
+        path("*.tab"), emit: filt_mobileOG_ch
         // we also collect commands executed and log files
         path("filtration_blast_mobileOG.log")
 
