@@ -75,6 +75,24 @@ This pipeline was developped with the Nanopore GridION and PromethION Mock Micro
 [Data Mockcommunity](https://github.com/LomanLab/mockcommunity)
 
 ## D-Tools
+
+| Tools | Version | Biocontainer |
+|:------|:--------|:-------------|
+| NanoPlot | 1.18.4 | [Biocontainer_NanoPlot](https://quay.io/repository/biocontainers/nanoplot?tab=tags&tag=1.28.4--py_0) |
+| Porechop_ABI | 0.5.1 | [Biocontainer_Porechop_ABI](https://quay.io/repository/biocontainers/quast?tab=tags&tags=5.3.0--py313pl5321h5ca1c30_2) |
+| NanoFilt | 1.1.3 | [Biocontainer_NanoFilt](https://quay.io/repository/biocontainers/nanofilt?tab=tags&tag=1.1.3--py35_0) |
+| Kraken2 | 2.17.1 | [Biocontainer_Kraken2](https://quay.io/repository/biocontainers/kraken2?tab=tags&tags=2.17.1--pl5321h077b44d_0)
+| SeqKit | 2.12.0 | [Biocontainer_SeqKit](https://quay.io/repository/biocontainers/seqkit?tab=tags&tags=2.12.0--he881be0_1) |
+| Prodigal | 2.6.3 | [Biocontainer_Prodigal](https://quay.io/repository/biocontainers/prodigal?tab=tags&tags=2.6.3--h577a1d6_11) |
+| Abricate | 1.2.0 | [Biocontainer_Abricate](https://quay.io/repository/biocontainers/abricate?tab=tags&tags=1.2.0--h05cac1d_0) |
+| Blast | 2.17.0 | [Biocontainers_Blast](https://quay.io/repository/biocontainers/blast?tab=tags&tags=2.17.0--h66d330f_0) |
+| Flye | 2.9.6 | [Biocontainers_Flye](https://quay.io/repository/biocontainers/flye?tab=tags&tags=2.9.6--py310h275bdba_0) |
+| Racon | 1.5.0 | [Biocontainers_Racon](https://quay.io/repository/biocontainers/racon?tab=tags&tags=1.5.0--h077b44d_6) |
+| Medaka | | [Biocontainer_Medaka](https://hub.docker.com/layers/ontresearch/medaka/shacf8338462607b17b1d68dbce212cb93daea50bad/images/sha256-72986cff36dd0f1e55bfa76daa9c2c83d143f946255d9aff5e594e658aeb4ec5)|
+| Minimap2 | 2.30 | [Biocontainer_Minimap2](https://quay.io/repository/biocontainers/minimap2?tab=tags&tags=2.30--h577a1d6_0) |
+| Samtools | 1.23 | [Biocontainer_Samtools](https://quay.io/repository/biocontainers/samtools?tab=tags&tags=1.23--h96c455f_0) |
+| Prokka | 1.15.6 | [Biocontainer_Prokka](https://quay.io/repository/biocontainers/prokka?tab=tags&tags=1.15.6--pl5321hdfd78af_0) |
+
 ### 1.Quality control
 #### 1.1 NanoPlot (v.1.28.4)
 NanoPlot is a visualization tool used to assess the quality of long-read sequencing data by generating plots and summary statistics such as read length distributions and quality scores. For this tool we used this [biocontainer](https://quay.io/repository/biocontainers/nanoplot?tab=tags&tag=1.28.4--py_0).
@@ -90,23 +108,25 @@ NanoPlot -t ${cpus} --fastq ${fastq} -o ${output}
 ```
 
 #### 1.2 Quast (v.5.3.0)
-
-- **Input** :
+Quast is a tool used to assess the quality of reads after assembly and polishing. For this tool we used this [biocontainer](https://quay.io/repository/biocontainers/quast?tab=tags&tags=5.3.0--py313pl5321h5ca1c30_2)
+- **Input** : Assembly and polished reads 
 
 - **Output** :
 
-- **Commandline** :
+- **Commandline** :  
 ```
+quast ${assembly} ${polished_reads} --threads ${cpus} -o ${output_dir}
 ```
 
 #### 1.3 CheckM2 
-
-- **Input** :
+CheckM2 is a tool used to assess the quality of binning. For this tool we used this [biocontainer](https://quay.io/repository/biocontainers/checkm2?tab=tags&tags=1.1.0--pyh7e72e81_1)
+- **Input** : Bins 
 
 - **Output** :
 
-- **Commandline** :
+- **Commandline** :  
 ```
+checkm2 predict -i ${bins} -o ${output_dir} -t ${cpus} -x fa.gz --database_path ${database}
 ```
 
 ### 2. Trimming and Filtering
