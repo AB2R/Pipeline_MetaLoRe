@@ -2,9 +2,13 @@
 Pipeline for microbial flora and atibiotics resistance caracterisation
 
 ## Introduction
+This pipeline was developped to meet several objectives through the analysis of long-reads sequencing data using the Oxford Nanopore Technology.
 
 ## Table of contents
-
+- A-Pipeline overview
+- B-Compute requirements
+- C-Data
+- D-Tools
 ## A-Pipeline overview
 ![Pipeline](images/Pipeline_MetaLoRe.png)
 
