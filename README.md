@@ -22,18 +22,58 @@ The pipeline is ready to use on the Genouest Cluster but it is possible to chang
 
 ## B-Pipeline stages
 ```
-|--1-qc
-|  |--1-nanoplot
-|  |--2-quast
-|  |--3-checkm2
-|
-|--2-trimming_filtering
-|  |--1-porechop_ABI
-|  |--2-nanofilt
-|  |--3-collect_read_id
-|  |--4-seqkit
-|
-|--3-assembly_alignment_polishing
+├──1-qc
+│  ├──1-nanoplot
+│  ├──2-quast
+│  └──3-checkm2
+│
+├──2-trimming_filtering
+│  ├──1-porechop_ABI
+│  ├──2-nanofilt
+│  ├──3-collect_read_id
+│  └──4-seqkit
+│
+├──3-assembly_alignment_polishing
+│  ├──1-flye
+│  ├──minimap2_2
+│  ├──racon_1
+│  ├──minimap2_3
+│  ├──racon_2
+│  ├──minimap2_4
+│  ├──samtools_2
+│  └──medaka
+│
+├──4-binning
+│  └──semibin2
+│
+├──5-annotation
+│  ├──1-prodigal_reads
+│  ├──2-prodigal_bins
+│  └──3-prokka
+│
+├──6-taxonomy
+│  ├──1-kraken2
+│  └──2-gtdbtk
+│
+├──7-genes_research
+│  ├──1-abricate_reads
+│  ├──2-blast_reads
+│  │  ├──1-blast_reads_megares
+│  │  ├──2-blast_reads_mobileOG
+│  │  └──3-blast_reads_plasmidfinder
+│  ├──3-filtration_blast_reads
+│  │  ├──1-filt_blast_reads_megares
+│  │  └──21-filt_blast_reads_mobileOG
+│  ├──4-abricate_bins
+│  ├──5-blast_bins
+│  │  ├──1-blast_bins_megares
+│  │  ├──2-blast_bins_mobileOG
+│  │  └──3-blast_bins_plasmidfinder
+│  └──6-filtration_blast_bins
+│     ├──1-filt_blast_bins_megares
+│     └──21-filt_blast_bins_mobileOG
+│
+└──8-statistics
 ```
 ## B-Compute requirements
 Recommended compute requirements :
