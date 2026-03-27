@@ -2,8 +2,13 @@
 Pipeline for microbial flora and atibiotics resistance caracterisation
 
 ## Introduction
-This pipeline was developped to meet several objectives through the analysis of long-reads sequencing data using the Oxford Nanopore Technology.
+This pipeline was developped to meet several objectives through the analysis of long-reads sequencing data using the Oxford Nanopore Technology :
+- Caracterisation of the microbial flora
+- Antibiotics and biocides genes research (ARG & BRG)
+- Mobiles genetiques elements research (MGE)
+- Co-occurrences research
 
+The pipeline is ready to use on the Genouest Cluster but it is possible to change the configuration file.
 ## Table of contents
 - A-Pipeline overview
 - B-Compute requirements
@@ -97,5 +102,15 @@ This pipeline was developped with the Nanopore GridION and PromethION Mock Micro
 | [Samtools](https://github.com/samtools/samtools) | 1.23 | [Biocontainer_Samtools](https://quay.io/repository/biocontainers/samtools?tab=tags&tags=1.23--h96c455f_0) |
 | [Prokka](https://github.com/tseemann/prokka) | 1.15.6 | [Biocontainer_Prokka](https://quay.io/repository/biocontainers/prokka?tab=tags&tags=1.15.6--pl5321hdfd78af_0) |
 
-## E-Usage
+## E-Databases
+
+| Databases | Version |
+|:----------|:--------|
+| CheckM2 | 2.1.11 |
+| Megares | 3.0.0 |
+| MobileOG | Beatrix 1.6 v1 |
+| PlasmidFinder | 2.2.0 |
+| GTDBtk | |
+
+## F-Usage
 
