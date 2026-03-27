@@ -12,12 +12,21 @@ The pipeline is ready to use on the Genouest Cluster but it is possible to chang
 ## Table of contents
 - A-Pipeline overview
 - B-Compute requirements
-- C-Data
-- D-Tools
+- C-Installation
+- D-Data
+- E-Tools
+- F-Databases
+
 ## A-Pipeline overview
 ![Pipeline](images/Pipeline_MetaLoRe.png)
 
 ## B-Compute requirements
+Recommended compute requirements :
+- CPUs : 32
+- Memory : 128 GB
+- Approximate run time :
+ 
+## C-Intallation
 Before running the entire pipeline, you need some requirements.
 
 ### CheckM2 requirements
@@ -79,11 +88,11 @@ cd plasmidfinder_db
 cat *.fsa > plasmidfinder_all.fasta
 ```
 
-## C-Data
+## D-Data
 This pipeline was developped with the Nanopore GridION and PromethION Mock Microbial Community Data available on :
 [Data Mockcommunity](https://github.com/LomanLab/mockcommunity)
 
-## D-Tools
+## E-Tools
 
 | Tools | Version | Biocontainer |
 |:------|:--------|:-------------|
@@ -102,15 +111,13 @@ This pipeline was developped with the Nanopore GridION and PromethION Mock Micro
 | [Samtools](https://github.com/samtools/samtools) | 1.23 | [Biocontainer_Samtools](https://quay.io/repository/biocontainers/samtools?tab=tags&tags=1.23--h96c455f_0) |
 | [Prokka](https://github.com/tseemann/prokka) | 1.15.6 | [Biocontainer_Prokka](https://quay.io/repository/biocontainers/prokka?tab=tags&tags=1.15.6--pl5321hdfd78af_0) |
 
-## E-Databases
+## F-Databases
 
 | Databases | Version |
 |:----------|:--------|
-| CheckM2 | 2.1.11 |
-| Megares | 3.0.0 |
-| MobileOG | Beatrix 1.6 v1 |
-| PlasmidFinder | 2.2.0 |
-| GTDBtk | |
-
-## F-Usage
+| [CheckM2](https://zenodo.org/record/14897628) | 2.1.11 |
+| [Megares](https://www.meglab.org/megares/download/) | 3.0.0 |
+| [MobileOG](https://mobileogdb.flsi.cloud.vt.edu/entries/database_download) | Beatrix 1.6 v1 |
+| [PlasmidFinder](https://bitbucket.org/genomicepidemiology/plasmidfinder_db.git) | 2.2.0 |
+| [GTDBtk](https://data.gtdb.aau.ecogenomic.org/releases/latest/auxillary_files/gtdbtk_package/full_package/) | |
 
