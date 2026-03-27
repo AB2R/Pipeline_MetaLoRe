@@ -21,6 +21,7 @@ The pipeline is ready to use on the Genouest Cluster but it is possible to chang
 ![Pipeline](images/Pipeline_MetaLoRe.png)
 
 ## B-Pipeline stages
+```
 |--1-qc
 |  |--1-nanoplot
 |  |--2-quast
@@ -31,7 +32,9 @@ The pipeline is ready to use on the Genouest Cluster but it is possible to chang
 |  |--2-nanofilt
 |  |--3-collect_read_id
 |  |--4-seqkit
-
+|
+|--3-assembly_alignment_polishing
+```
 ## B-Compute requirements
 Recommended compute requirements :
 - CPUs : 32
