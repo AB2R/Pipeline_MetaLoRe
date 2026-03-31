@@ -91,12 +91,22 @@ checkHostname()
 include { nanoplot }         from './modules/nanoplot.nf'
 include { porechop_abi }     from './modules/porechop_abi.nf'
 include { nanofilt }         from './modules/nanofilt.nf'
-include { minimap2_1 }       from './modules/minimap2_1.nf'
-include { samtools_1 }       from './modules/samtools_1.nf'
-include { bedtools }         from './modules/bedtools.nf'
+//include { minimap2_1 }       from './modules/minimap2_1.nf'
+//include { samtools_1 }       from './modules/samtools_1.nf'
+//include { bedtools }         from './modules/bedtools.nf'
 include { kraken2 }          from './modules/kraken2.nf'
+include { filtration_reads_kraken2 } from './modules/filtration_reads_kraken2.nf'
 include { collect_read_id }  from './modules/collect_read_id.nf'
 include { seqkit }           from './modules/seqkit.nf'
+include { prodigal_reads }   from './modules/prodigal_reads.nf'
+include { minimap2_reads }   from './modules/minimap2_reads.nf'
+include { samtools_reads }       from './modules/samtools_reads.nf'
+include { abricate_reads }   from './modules/abricate_reads.nf'
+include { blast_reads_megares } from './modules/blast_reads_megares.nf'
+include { blast_reads_mobileOG } from './modules/blast_reads_mobileOG.nf'
+include { blast_reads_plasmidfinder } from './modules/blast_reads_plasmidfinder'
+include { filt_reads_blast_megares } from './modules/filt_reads_blast_megares'
+include { filt_reads_blast_mobileOG } from './modules/filt_reads_blast_mobileOG.nf'
 include { flye }             from './modules/flye.nf'
 include { minimap2_2 }       from './modules/minimap2_2.nf'
 include { racon_1 }          from './modules/racon_1.nf'
@@ -142,22 +152,52 @@ workflow {
     nanofilt(porechop_abi.out.trim_ch.collect())
 
     // Mapping ONT reds on reference genome
-    minimap2_1(nanofilt.out.filt_ch.collect())
+    //minimap2_1(nanofilt.out.filt_ch.collect())
 
     // Extracting unmaped reads and sorting alignments
-    samtools_1(minimap2_1.out.aln_ch.collect())
+    //samtools_1(minimap2_1.out.aln_ch.collect())
 
     // BAM to FASTQ conversion
-    bedtools(samtools_1.out.bam_ch.collect())
+    //bedtools(samtools_1.out.bam_ch.collect())
 
     // Taxonomic classification
-    kraken2(bedtools.out.fitted_ch.collect())
+    kraken2(nanofilt.out.filt_ch.collect())
+
+    // Filtration results Kraken2
+    filtration_reads_kraken2(kraken2.out.kraken_report_ch.collect())
 
     // Read ID collection
     collect_read_id(kraken2.out.kraken_ch.collect())
 
     // Read extraction
-    seqkit(collect_read_id.out.id_ch.collect(), bedtools.out.fitted_ch.collect())
+    seqkit(collect_read_id.out.id_ch.collect(), nanofilt.out.filt_ch.collect())
+
+    // Genes anotation
+    prodigal_reads(seqkit.out.id2_ch.collect())
+
+    // Mapping ONT reads on genes provide by Prodigal
+    minimap2_reads(seqkit.out.id2_ch.collect(),prodigal_reads.out.genes_ch.collect())
+
+    // Statistics on reads
+    samtools_reads(minimap2_reads.out.aln_reads_ch.collect())
+
+    // ARG/BRG/MGE/PLASMID research
+    abricate_reads(prodigal_reads.out.genes_ch.collect())
+
+    // ARG research 
+    blast_reads_megares(prodigal_reads.out.genes_ch.collect(), params.megares_db)
+
+    // BRG research
+    blast_reads_mobileOG(prodigal_reads.out.genes_ch.collect(), params.mobileOG_db)
+
+    // Plasmid research
+    blast_reads_plasmidfinder(prodigal_reads.out.genes_ch.collect(), params.plasmidfinder_db)
+
+    // Filtration reads megares
+    filt_reads_blast_megares(blast_reads_megares.out.reads_megares_ch.collect())
+
+    // Filtration reads mobileOG
+    filt_reads_blast_mobileOG(blast_reads_mobileOG.out.reads_mobileOG_ch.collect())
 
     // Assembly 
     flye(seqkit.out.id2_ch.collect())

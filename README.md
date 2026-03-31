@@ -71,7 +71,7 @@ The pipeline is ready to use on the Genouest Cluster but it is possible to chang
 │  │  └──3-blast_bins_plasmidfinder
 │  └──6-filtration_blast_bins
 │     ├──1-filt_blast_bins_megares
-│     └──21-filt_blast_bins_mobileOG
+│     └──2-filt_blast_bins_mobileOG
 │
 └──8-statistics
 ```
@@ -174,5 +174,5 @@ This pipeline was developped with the Nanopore GridION and PromethION Mock Micro
 | [Megares](https://www.meglab.org/megares/download/) | 3.0.0 |
 | [MobileOG](https://mobileogdb.flsi.cloud.vt.edu/entries/database_download) | Beatrix 1.6 v1 |
 | [PlasmidFinder](https://bitbucket.org/genomicepidemiology/plasmidfinder_db.git) | 2.2.0 |
-| [GTDBtk](https://data.gtdb.aau.ecogenomic.org/releases/latest/auxillary_files/gtdbtk_package/full_package/) | |
+| [GTDBtk](https://data.gtdb.aau.ecogenomic.org/releases/latest/auxillary_files/gtdbtk_package/full_package/) | 226 |
 

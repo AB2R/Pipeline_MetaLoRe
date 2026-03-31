@@ -1,4 +1,7 @@
 #!/bin/bash
+#SBATCH --cpus-per-task=8
+#SBATCH --mem=128G
+
 . /local/env/envnextflow-23.10.0.sh
 
 # 1 - Loads modules needed to run Nextflow pipeline
