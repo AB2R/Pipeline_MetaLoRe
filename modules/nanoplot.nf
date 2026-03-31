@@ -14,7 +14,7 @@ process nanoplot {
     
     // Workflow input stream
     input:
-        path(ONT_data)
+        path(marine_ch)
 
     // Workflow output stream
     output:
@@ -26,6 +26,6 @@ process nanoplot {
     // Script to execute (located in bin/ sub-directory)
     script:
     """
-    nanoplot.sh ${ONT_data} ${task.cpus} nanoplot.cmd &> nanoplot.log 2>&1
+    nanoplot.sh ${marine_ch} ${task.cpus} nanoplot.cmd &> nanoplot.log 2>&1
     """ 
 }

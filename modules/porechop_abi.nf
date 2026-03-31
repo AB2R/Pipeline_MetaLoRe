@@ -14,7 +14,7 @@ process porechop_abi {
     
     // Workflow input stream
     input:
-        path(ONT_data)
+        path(marine_ch)
 
     // Workflow output stream
     output:
@@ -26,7 +26,7 @@ process porechop_abi {
     // Script to execute (located in bin/ sub-directory)
     script:
     """
-    porechop_abi.sh ${task.cpus} ${ONT_data} porechop_abi.cmd &> porechop_abi.log 2>&1
+    porechop_abi.sh ${task.cpus} ${marine_ch} porechop_abi.cmd &> porechop_abi.log 2>&1
     """ 
 }
 

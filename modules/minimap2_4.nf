@@ -2,13 +2,13 @@ process minimap2_4 {
 
     // label is used to find appropriate resources to use with this task.
     // see conf/resources.conf
-    label 'highmem'
+    label 'midmem'
 
     // not necessary to include tag section
 
     // Result files published in Netxtflow result directory.
     // See also 'output' directive, below.
-    publishDir "${params.resultdir}/7-polishing/4-minimap2_4",   mode: 'copy', pattern: '*.sam'
+    publishDir "${params.resultdir}/3-assembly_alignment_polishing/6-minimap2_4",   mode: 'copy', pattern: '*.sam'
     publishDir "${params.resultdir}/logs/minimap2_4",     mode: 'copy', pattern: 'minimap2_4.log'
     publishDir "${params.outdir}/00_pipeline_info/cmd", mode: 'copy', pattern: 'minimap2_4.cmd'
 

@@ -8,7 +8,7 @@ process collect_read_id {
 
     // Result files published in Netxtflow result directory.
     // See also 'output' directive, below.
-    publishDir "${params.resultdir}/4-classification/2-collect_read_id",   mode: 'copy', pattern: '*.txt'
+    publishDir "${params.resultdir}/2-trimming_filtering/3-collect_read_id",   mode: 'copy', pattern: '*.txt'
     publishDir "${params.resultdir}/logs/collect_read_id",     mode: 'copy', pattern: 'collect_read_id.log'
     publishDir "${params.outdir}/00_pipeline_info/cmd", mode: 'copy', pattern: 'collect_read_id.cmd'
 

@@ -9,9 +9,9 @@ process prokka {
 
     // Result files published in Netxtflow result directory.
     // See also 'output' directive, below.
-    publishDir "${params.resultdir}/9-annotation/2-prokka",   mode: 'copy', pattern: '**/*.faa'
-    publishDir "${params.resultdir}/9-annotation/2-prokka",   mode: 'copy', pattern: '**/*.fna'
-    publishDir "${params.resultdir}/9-annotation/2-prokka",   mode: 'copy', pattern: '**/*.gff'
+    publishDir "${params.resultdir}/5-annotation/3-prokka",   mode: 'copy', pattern: '**/*.faa'
+    publishDir "${params.resultdir}/5-annotation/3-prokka",   mode: 'copy', pattern: '**/*.fna'
+    publishDir "${params.resultdir}/5-annotation/3-prokka",   mode: 'copy', pattern: '**/*.gff'
     publishDir "${params.resultdir}/logs/prokka",     mode: 'copy', pattern: 'prokka.log'
     publishDir "${params.outdir}/00_pipeline_info/cmd", mode: 'copy', pattern: 'prokka.cmd'
 

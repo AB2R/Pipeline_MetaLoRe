@@ -19,7 +19,7 @@ process blast_plasmidfinder {
 
     // Workflow output stream
     output:
-        path("*.tab")
+        path("*.tab"), emit: plasmidf_ch
         // we also collect commands executed and log files
         path("blast_plasmidfinder.log")
         path("blast_plasmidfinder.cmd")

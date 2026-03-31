@@ -2,13 +2,13 @@ process racon_1 {
 
     // label is used to find appropriate resources to use with this task.
     // see conf/resources.conf
-    label 'highmem'
+    label 'midmem'
 
     // not necessary to include tag section
 
     // Result files published in Netxtflow result directory.
     // See also 'output' directive, below.
-    publishDir "${params.resultdir}/7-polishing/1-racon_1",   mode: 'copy', pattern: 'racon.fasta'
+    publishDir "${params.resultdir}/3-assembly_alignment_polishing/3-racon_1",   mode: 'copy', pattern: 'racon.fasta'
     publishDir "${params.resultdir}/logs/racon_1",     mode: 'copy', pattern: 'racon_1.log'
     publishDir "${params.outdir}/00_pipeline_info/cmd", mode: 'copy', pattern: 'racon_1.cmd'
 

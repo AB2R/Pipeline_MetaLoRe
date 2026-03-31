@@ -8,7 +8,7 @@ process checkm2 {
 
     // Result files published in Netxtflow result directory.
     // See also 'output' directive, below.
-    publishDir "${params.resultdir}/8-binning/2-checkm2",   mode: 'copy', pattern: 'checkm2_out'
+    publishDir "${params.resultdir}/1-qc/3-checkm2",   mode: 'copy', pattern: 'checkm2_out'
     publishDir "${params.resultdir}/logs/checkm2",     mode: 'copy', pattern: 'checkm2.log'
     publishDir "${params.outdir}/00_pipeline_info/cmd", mode: 'copy', pattern: 'checkm2.cmd'
 

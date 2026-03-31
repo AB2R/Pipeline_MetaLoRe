@@ -2,13 +2,13 @@ process semibin {
 
     // label is used to find appropriate resources to use with this task.
     // see conf/resources.conf
-    label 'midmem'
+    label 'highmem'
 
     // not necessary to include tag section
 
     // Result files published in Netxtflow result directory.
     // See also 'output' directive, below.
-    publishDir "${params.resultdir}/8-binning/1-semibin",   mode: 'copy', pattern: 'semibin_out/**'
+    publishDir "${params.resultdir}/4-binning/1-semibin",   mode: 'copy', pattern: 'semibin_out/**'
     publishDir "${params.resultdir}/logs/semibin",     mode: 'copy', pattern: 'semibin.log'
     publishDir "${params.outdir}/00_pipeline_info/cmd", mode: 'copy', pattern: 'semibin.cmd'
 
