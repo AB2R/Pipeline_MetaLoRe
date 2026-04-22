@@ -2,7 +2,7 @@ process porechop_abi {
 
     // label is used to find appropriate resources to use with this task.
     // see conf/resources.conf
-    label 'highmem'
+    label 'midmem'
     
     // not necessary to include tag section 
     
@@ -14,7 +14,7 @@ process porechop_abi {
     
     // Workflow input stream
     input:
-        path(marine_ch)
+        path(cleanfq_ch)
 
     // Workflow output stream
     output:
@@ -26,7 +26,7 @@ process porechop_abi {
     // Script to execute (located in bin/ sub-directory)
     script:
     """
-    porechop_abi.sh ${task.cpus} ${marine_ch} porechop_abi.cmd &> porechop_abi.log 2>&1
+    porechop_abi.sh ${task.cpus} ${cleanfq_ch} porechop_abi.cmd &> porechop_abi.log 2>&1
     """ 
 }
 

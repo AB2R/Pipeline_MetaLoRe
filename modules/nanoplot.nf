@@ -2,7 +2,7 @@ process nanoplot {
 
     // label is used to find appropriate resources to use with this task.
     // see conf/resources.conf
-    label 'lowmem'
+    label 'ultralowmem'
     
     // not necessary to include tag section 
     
@@ -14,7 +14,7 @@ process nanoplot {
     
     // Workflow input stream
     input:
-        path(marine_ch)
+        path(ONT_ch)
 
     // Workflow output stream
     output:
@@ -26,6 +26,6 @@ process nanoplot {
     // Script to execute (located in bin/ sub-directory)
     script:
     """
-    nanoplot.sh ${marine_ch} ${task.cpus} nanoplot.cmd &> nanoplot.log 2>&1
+    nanoplot.sh ${ONT_ch} ${task.cpus} nanoplot.cmd &> nanoplot.log 2>&1
     """ 
 }

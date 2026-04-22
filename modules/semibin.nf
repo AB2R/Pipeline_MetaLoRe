@@ -2,7 +2,7 @@ process semibin {
 
     // label is used to find appropriate resources to use with this task.
     // see conf/resources.conf
-    label 'highmem'
+    label 'midmem'
 
     // not necessary to include tag section
 

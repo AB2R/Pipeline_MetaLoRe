@@ -2,7 +2,7 @@ process flye {
 
     // label is used to find appropriate resources to use with this task.
     // see conf/resources.conf
-    label 'ultramem'
+    label 'highmem'
 
     // not necessary to include tag section
 
