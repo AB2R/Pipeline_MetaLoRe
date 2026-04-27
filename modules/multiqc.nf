@@ -14,7 +14,7 @@ process multiqc {
     
     // Workflow input stream
     input:
-        path(params.resultdir)
+        val(params.resultdir)
 
     // Workflow output stream
     output:

@@ -8,11 +8,11 @@ process abricate_reads {
 
     // Result files published in Netxtflow result directory.
     // See also 'output' directive, below.
-    publishDir "${params.resultdir}/7-genes_research/1-abricate_reads",   mode: 'copy', pattern: '*ncbi.tab'
-    publishDir "${params.resultdir}/7-genes_research/1-abricate_reads",   mode: 'copy', pattern: '*card.tab'
-    publishDir "${params.resultdir}/7-genes_research/1-abricate_reads",   mode: 'copy', pattern: '*resfinder.tab'
-    publishDir "${params.resultdir}/7-genes_research/1-abricate_reads",   mode: 'copy', pattern: '*megares.tab'
-    publishDir "${params.resultdir}/7-genes_research/1-abricate_reads",   mode: 'copy', pattern: '*plasmidfinder.tab'
+    publishDir "${params.resultdir}/8-genes_research/1-abricate_reads",   mode: 'copy', pattern: '*ncbi.tab'
+    publishDir "${params.resultdir}/8-genes_research/1-abricate_reads",   mode: 'copy', pattern: '*card.tab'
+    publishDir "${params.resultdir}/8-genes_research/1-abricate_reads",   mode: 'copy', pattern: '*resfinder.tab'
+    publishDir "${params.resultdir}/8-genes_research/1-abricate_reads",   mode: 'copy', pattern: '*megares.tab'
+    publishDir "${params.resultdir}/8-genes_research/1-abricate_reads",   mode: 'copy', pattern: '*plasmidfinder.tab'
     publishDir "${params.resultdir}/logs/abricate_reads",     mode: 'copy', pattern: 'abricate_reads.log'
     publishDir "${params.outdir}/00_pipeline_info/cmd", mode: 'copy', pattern: 'abricate_reads.cmd'
 
