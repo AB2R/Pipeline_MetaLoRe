@@ -1,0 +1,31 @@
+process gtdbtk {
+
+    // label is used to find appropriate resources to use with this task.
+    // see conf/resources.conf
+    label 'highmem'
+
+    // not necessary to include tag section
+
+    // Result files published in Netxtflow result directory.
+    // See also 'output' directive, below.
+    publishDir "${params.resultdir}/6-taxonomy/3-gtdbtk",   mode: 'copy', pattern: 'gtdbtk_out/**'
+    publishDir "${params.resultdir}/logs/gtdbtk",     mode: 'copy', pattern: 'gtdbtk.log'
+    publishDir "${params.outdir}/00_pipeline_info/cmd", mode: 'copy', pattern: 'gtdbtk.cmd'
+
+    // Workflow input stream
+    input:
+        each(bins_files_ch)
+
+    // Workflow output stream
+    output:
+        path("gtdbtk_out/**")
+        // we also collect commands executed and log files
+        path("gtdbtk.log")
+        path("gtdbtk.cmd")
+
+    // Script to execute (located in bin/ sub-directory)
+    script:
+    """
+    gtdbtk.sh ${bins_files_ch} gtdbtk_out ${task.cpus} gtdbtk.cmd &> gtdbtk.log 2>&1
+    """
+}
