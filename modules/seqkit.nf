@@ -8,7 +8,7 @@ process seqkit {
 
     // Result files published in Netxtflow result directory.
     // See also 'output' directive, below.
-    publishDir "${params.resultdir}/2-trimming_filtering/4-seqkit",   mode: 'copy', pattern: '*.fasta'
+    publishDir "${params.resultdir}/2-trimming_filtering/5-seqkit",   mode: 'copy', pattern: '*.fasta'
     publishDir "${params.resultdir}/logs/seqkit",     mode: 'copy', pattern: 'seqkit.log'
     publishDir "${params.outdir}/00_pipeline_info/cmd", mode: 'copy', pattern: 'seqkit.cmd'
 

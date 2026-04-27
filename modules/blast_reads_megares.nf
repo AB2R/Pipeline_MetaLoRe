@@ -8,7 +8,7 @@ process blast_reads_megares {
 
     // Result files published in Netxtflow result directory.
     // See also 'output' directive, below.
-    publishDir "${params.resultdir}/7-genes_research/2-blast_reads/1-blast_reads_megares",   mode: 'copy', pattern: '*.tab'
+    publishDir "${params.resultdir}/8-genes_research/2-blast_reads/1-blast_reads_megares",   mode: 'copy', pattern: '*.tab'
     publishDir "${params.resultdir}/logs/blast_reads_megares",     mode: 'copy', pattern: 'blast_reads_megares.log'
     publishDir "${params.outdir}/00_pipeline_info/cmd", mode: 'copy', pattern: 'blast_reads_megares.cmd'
 

@@ -8,7 +8,7 @@ process blast_reads_mobileOG {
 
     // Result files published in Netxtflow result directory.
     // See also 'output' directive, below.
-    publishDir "${params.resultdir}/7-genes_research/2-blast_reads/2-blast_reads_mobileOG",   mode: 'copy', pattern: '*.tab'
+    publishDir "${params.resultdir}/8-genes_research/2-blast_reads/2-blast_reads_mobileOG",   mode: 'copy', pattern: '*.tab'
     publishDir "${params.resultdir}/logs/blast_reads_mobileOG",     mode: 'copy', pattern: 'blast_reads_mobileOG.log'
     publishDir "${params.outdir}/00_pipeline_info/cmd", mode: 'copy', pattern: 'blast_reads_mobileOG.cmd'
 

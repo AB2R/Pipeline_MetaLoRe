@@ -8,8 +8,8 @@ process kraken2 {
 
     // Result files published in Netxtflow result directory.
     // See also 'output' directive, below.
-    publishDir "${params.resultdir}/6-taxonomy/1-kraken2",   mode: 'copy', pattern: '*.kraken'
-    publishDir "${params.resultdir}/6-taxonomy/1-kraken2",   mode: 'copy', pattern: '*.report'
+    publishDir "${params.resultdir}/7-taxonomy/1-kraken2",   mode: 'copy', pattern: '*.kraken'
+    publishDir "${params.resultdir}/7-taxonomy/1-kraken2",   mode: 'copy', pattern: '*.report'
     publishDir "${params.resultdir}/logs/kraken2",     mode: 'copy', pattern: 'kraken2.log'
     publishDir "${params.outdir}/00_pipeline_info/cmd", mode: 'copy', pattern: 'kraken2.cmd'
 

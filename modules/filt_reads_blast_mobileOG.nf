@@ -8,7 +8,7 @@ process filt_reads_blast_mobileOG {
 
     // Result files published in Netxtflow result directory.
     // See also 'output' directive, below.
-    publishDir "${params.resultdir}/7-genes_research/3-filtration_blast/2-filt_reads_blast_mobileOG",   mode: 'copy', pattern: '*.tab'
+    publishDir "${params.resultdir}/8-genes_research/3-filtration_blast/2-filt_reads_blast_mobileOG",   mode: 'copy', pattern: '*.tab'
     publishDir "${params.resultdir}/logs/filt_reads_blast_mobileOG",     mode: 'copy', pattern: 'filt_reads_blast_mobileOG.log'
     publishDir "${params.outdir}/00_pipeline_info/cmd", mode: 'copy', pattern: 'filt_reads_blast_mobileOG.cmd'
 
