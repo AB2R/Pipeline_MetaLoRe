@@ -8,7 +8,7 @@ process blast_db_mobileOG {
 
     // Result files published in Netxtflow result directory.
     // See also 'output' directive, below.
-    publishDir "${baseDir}/databases",   mode: 'copy', pattern: 'mobileOG-db*'
+    publishDir "${baseDir}/databases/mobileog_db",   mode: 'copy', pattern: 'mobileOG-db*'
     publishDir "${params.resultdir}/logs/blast_db_mobileOG",     mode: 'copy', pattern: 'blast_db_mobileOG.log'
     publishDir "${params.outdir}/00_pipeline_info/cmd", mode: 'copy', pattern: 'blast_db_mobileOG.cmd'
 
