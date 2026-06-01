@@ -7,9 +7,9 @@ FASTQ_FILE=${args[1]}
 LOGCMD=${args[2]}
 
 # Commande to execute
-CMD1="samtools sort -@ ${NCPUS} ${FASTQ_FILE} -o ${FASTQ_FILE%%.*}sorted2.bam"
+CMD1="samtools sort -@ ${NCPUS} ${FASTQ_FILE} -o $(basename ${FASTQ_FILE%%_*})sorted2.bam"
 
-CMD2="samtools index ${FASTQ_FILE%%.*}sorted2.bam"
+CMD2="samtools index $(basename ${FASTQ_FILE%%_*})sorted2.bam"
 
 # Save command in log
 echo ${CMD1} >> ${LOGCMD}

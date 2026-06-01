@@ -16,7 +16,7 @@ process prodigal {
 
     // Workflow input stream
     input:
-        path(medaka_ch)
+        path(polish3_ch)
 
     // Workflow output stream
     output:

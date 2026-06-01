@@ -15,7 +15,7 @@ process seqkit {
     // Workflow input stream
     input:
         path(id_ch)
-        path(fitted_ch)
+        path(filt_ch)
 
     // Workflow output stream
     output:
@@ -27,6 +27,6 @@ process seqkit {
     // Script to execute (located in bin/ sub-directory)
     script:
     """
-    seqkit.sh ${id_ch} ${fitted_ch} seqkit.cmd &> seqkit.log 2>&1
+    seqkit.sh ${id_ch} ${filt_ch} seqkit.cmd &> seqkit.log 2>&1
     """
 }

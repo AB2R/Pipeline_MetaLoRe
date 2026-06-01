@@ -7,7 +7,7 @@ FASTQ_FILE=${args[1]}
 LOGCMD=${args[2]}
 
 # Commande to execute
-CMD="minimap2 -ax map-ont ${ASSEMBLY_FASTA} ${FASTQ_FILE} > ${FASTQ_FILE%%.*}_aln3.sam"
+CMD="minimap2 -ax map-ont ${ASSEMBLY_FASTA} ${FASTQ_FILE} > $(basename ${FASTQ_FILE%%_*})_aln3.sam"
 
 # Save command in log
 echo ${CMD} > ${LOGCMD}

@@ -15,7 +15,7 @@ process kraken2_asmbl {
 
     // Workflow input stream
     input:
-        path(medaka_ch)
+        path(polish3_ch)
 
     // Workflow output stream
     output:
@@ -28,6 +28,6 @@ process kraken2_asmbl {
     // Script to execute (located in bin/ sub-directory)
     script:
     """
-    kraken2_asmbl.sh ${task.cpus} ${params.db_kraken} ${medaka_ch} kraken2_asmbl.cmd &> kraken2_asmbl.log 2>&1
+    kraken2_asmbl.sh ${task.cpus} ${params.db_kraken} ${polish3_ch} kraken2_asmbl.cmd &> kraken2_asmbl.log 2>&1
     """
 }
