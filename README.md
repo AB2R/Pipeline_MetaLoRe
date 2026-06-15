@@ -171,7 +171,10 @@ This pipeline was developped with the Nanopore GridION and PromethION Mock Micro
 | Databases | Version |
 |:----------|:--------|
 | [CheckM2](https://zenodo.org/record/14897628) | 2.1.11 |
-| [Kraken2_core_nt] | |
+| [Kraken2_core_nt](https://benlangmead.github.io/aws-indexes/k2) | 15/10/2025|
+| [CARD](https://card.mcmaster.ca/) | 05/12/2025 |
+| [ResFinder](https://genepi.food.dtu.dk/resfinder) | 05/12/2025 |
+| [AMRFinderPlus](https://github.com/ncbi/amr) | 05/12/2025 |
 | [Megares](https://www.meglab.org/megares/download/) | 3.0.0 |
 | [MobileOG](https://mobileogdb.flsi.cloud.vt.edu/entries/database_download) | Beatrix 1.6 v1 |
 | [PlasmidFinder](https://bitbucket.org/genomicepidemiology/plasmidfinder_db.git) | 2.2.0 |
