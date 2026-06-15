@@ -73,8 +73,6 @@ summary['Model Medaka'] = params.model_medaka
 summary['Environment SemiBin'] = params.env_semibin
 summary['Checkm2 database'] = params.db_checkm2
 summary['Abricate databases'] = params.db2_abricate
-summary['Phylophlan database'] = params.db_phylophlan
-summary['Phylophlan diversity'] = params.diversity_phylophlan
 summary['Megares database'] = params.megares_db
 summary['MobileOG database'] = params.mobileOG_db
 summary['Plasmidfinder database'] = params.plasmidfinder_db
@@ -88,49 +86,41 @@ checkHostname()
 /*
  * IMPORTING MODULES
  */
-include { nanoplot }         from './modules/nanoplot.nf'
-include { porechop_abi }     from './modules/porechop_abi.nf'
-include { nanofilt }         from './modules/nanofilt.nf'
-//include { minimap2_1 }       from './modules/minimap2_1.nf'
-//include { samtools_1 }       from './modules/samtools_1.nf'
-//include { bedtools }         from './modules/bedtools.nf'
-include { kraken2 }          from './modules/kraken2.nf'
-include { filtration_reads_kraken2 } from './modules/filtration_reads_kraken2.nf'
-include { collect_read_id }  from './modules/collect_read_id.nf'
-include { seqkit }           from './modules/seqkit.nf'
-include { prodigal_reads }   from './modules/prodigal_reads.nf'
-include { minimap2_reads }   from './modules/minimap2_reads.nf'
-include { samtools_reads }       from './modules/samtools_reads.nf'
-include { abricate_reads }   from './modules/abricate_reads.nf'
-include { blast_reads_megares } from './modules/blast_reads_megares.nf'
-include { blast_reads_mobileOG } from './modules/blast_reads_mobileOG.nf'
-include { blast_reads_plasmidfinder } from './modules/blast_reads_plasmidfinder'
-include { filt_reads_blast_megares } from './modules/filt_reads_blast_megares'
-include { filt_reads_blast_mobileOG } from './modules/filt_reads_blast_mobileOG.nf'
-include { flye }             from './modules/flye.nf'
-include { minimap2_2 }       from './modules/minimap2_2.nf'
-include { racon_1 }          from './modules/racon_1.nf'
-include { minimap2_3 }       from './modules/minimap2_3.nf'
-include { racon_2 }          from './modules/racon_2.nf'
-include { minimap2_4 }       from './modules/minimap2_4.nf'
-include { samtools_2 }       from './modules/samtools_2.nf'
-include { medaka }           from './modules/medaka.nf'
-include { quast }            from './modules/quast.nf'
-include { semibin }          from './modules/semibin.nf'
-include { checkm2 }          from './modules/checkm2.nf'
-include { prodigal }         from './modules/prodigal.nf'
-include { prokka }           from './modules/prokka.nf'
-include { abricate }         from './modules/abricate.nf'
-include { phylophlan }       from './modules/phylophlan.nf'
-include { blast_db_megares } from './modules/blast_db_megares.nf'
-include { blast_megares }    from './modules/blast_megares.nf'
-include { blast_db_mobileOG} from './modules/blast_db_mobileOG.nf'
-include { blast_mobileOG }   from './modules/blast_mobileOG.nf'
-include { blast_db_plasmidfinder } from './modules/blast_db_plasmidfinder.nf'
-include { blast_plasmidfinder }    from './modules/blast_plasmidfinder.nf'
-include { gtdbtk }           from './modules/gtdbtk.nf'
-include { filtration_blast_megares } from './modules/filtration_blast_megares'
-include { filtration_blast_mobileOG } from './modules/filtration_blast_mobileOG.nf'
+include { nanoplot }                  from './modules/nanoplot.nf'
+include { porechop_abi }              from './modules/porechop_abi.nf'
+include { seqkit_fastq }              from './modules/seqkit_fastq.nf'
+include { nanofilt }                  from './modules/nanofilt.nf'
+include { kraken2 }                   from './modules/kraken2.nf'
+include { collect_read_id }           from './modules/collect_read_id.nf'
+include { seqkit }                    from './modules/seqkit.nf'
+include { flye }                      from './modules/flye.nf'
+include { minimap2_2 }                from './modules/minimap2_2.nf'
+include { racon_1 }                   from './modules/racon_1.nf'
+include { minimap2_3 }                from './modules/minimap2_3.nf'
+include { racon_2 }                   from './modules/racon_2.nf'
+include { minimap2_4 }                from './modules/minimap2_4.nf'
+include { samtools_2 }                from './modules/samtools_2.nf'
+include { medaka }                    from './modules/medaka.nf'
+include { quast }                     from './modules/quast.nf'
+include { kraken2_asmbl }             from './modules/kraken2_asmbl.nf'
+include { prodigal }                  from './modules/prodigal.nf'
+include { minimap2_1 }                from './modules/minimap2_1.nf'
+include { samtools_1 }                from './modules/samtools_1.nf'
+include { abricate }                  from './modules/abricate.nf'
+include { blast_megares }             from './modules/blast_megares.nf'
+include { blast_mobileog }            from './modules/blast_mobileog.nf'
+include { blast_plasmidfinder }       from './modules/blast_plasmidfinder'
+include { filt_blast_megares }        from './modules/filt_blast_megares'
+include { filt_blast_mobileog }       from './modules/filt_blast_mobileog.nf'
+include { filt_blast_plasmidf }       from './modules/filt_blast_plasmidf.nf'
+include { genes_research }            from './modules/genes_research.nf'
+include { semibin }                   from './modules/semibin.nf'
+include { checkm2 }                   from './modules/checkm2.nf'
+include { blast_db_megares }          from './modules/blast_db_megares.nf'
+include { blast_db_mobileOG}          from './modules/blast_db_mobileOG.nf'
+include { blast_db_plasmidfinder }    from './modules/blast_db_plasmidfinder.nf'
+include { gtdbtk }                    from './modules/gtdbtk.nf'
+include { multiqc }                   from './modules/multiqc.nf'
 
 /*
  * CREATE INPUT CHANNELS
@@ -145,59 +135,23 @@ workflow {
     // Quality control of ONT raw reads
     nanoplot(ONT_ch)
 
+    // Fastq cleaning
+    seqkit_fastq(ONT_ch)
+
     // Trimming of ONT raw read
-    porechop_abi(ONT_ch)
+    porechop_abi(seqkit_fastq.out.cleanfq_ch.collect())
 
     // Filtering of ONT raw data
     nanofilt(porechop_abi.out.trim_ch.collect())
 
-    // Mapping ONT reds on reference genome
-    //minimap2_1(nanofilt.out.filt_ch.collect())
-
-    // Extracting unmaped reads and sorting alignments
-    //samtools_1(minimap2_1.out.aln_ch.collect())
-
-    // BAM to FASTQ conversion
-    //bedtools(samtools_1.out.bam_ch.collect())
-
     // Taxonomic classification
     kraken2(nanofilt.out.filt_ch.collect())
-
-    // Filtration results Kraken2
-    filtration_reads_kraken2(kraken2.out.kraken_report_ch.collect())
 
     // Read ID collection
     collect_read_id(kraken2.out.kraken_ch.collect())
 
     // Read extraction
     seqkit(collect_read_id.out.id_ch.collect(), nanofilt.out.filt_ch.collect())
-
-    // Genes anotation
-    prodigal_reads(seqkit.out.id2_ch.collect())
-
-    // Mapping ONT reads on genes provide by Prodigal
-    minimap2_reads(seqkit.out.id2_ch.collect(),prodigal_reads.out.genes_ch.collect())
-
-    // Statistics on reads
-    samtools_reads(minimap2_reads.out.aln_reads_ch.collect())
-
-    // ARG/BRG/MGE/PLASMID research
-    abricate_reads(prodigal_reads.out.genes_ch.collect())
-
-    // ARG research 
-    blast_reads_megares(prodigal_reads.out.genes_ch.collect(), params.megares_db)
-
-    // BRG research
-    blast_reads_mobileOG(prodigal_reads.out.genes_ch.collect(), params.mobileOG_db)
-
-    // Plasmid research
-    blast_reads_plasmidfinder(prodigal_reads.out.genes_ch.collect(), params.plasmidfinder_db)
-
-    // Filtration reads megares
-    filt_reads_blast_megares(blast_reads_megares.out.reads_megares_ch.collect())
-
-    // Filtration reads mobileOG
-    filt_reads_blast_mobileOG(blast_reads_mobileOG.out.reads_mobileOG_ch.collect())
 
     // Assembly 
     flye(seqkit.out.id2_ch.collect())
@@ -226,50 +180,62 @@ workflow {
     // Quality control of assembly
     quast(flye.out.asmbl_ch.collect(), racon_2.out.polish2_ch.collect(), medaka.out.polish3_ch.collect())
 
+    // Taxonomic classification on assembly
+    kraken2_asmbl(medaka.out.polish3_ch.collect())
+
+    // prodigal on assembly
+    prodigal(medaka.out.polish3_ch.collect())
+
+    // Mapping reads on genes provide by Prodigal
+    minimap2_1(prodigal.out.genes_ch.collect(), seqkit.out.id2_ch.collect())
+
+    // Abundance matrix
+    samtools_1(minimap2_1.out.aln1_ch.collect())
+
+    // ARG/BRG/MGE/PLASMID research
+    abricate(prodigal.out.genes_ch.collect())
+
+    // BRG research
+    blast_megares(prodigal.out.genes_ch.collect(), params.megares_db)
+
+    // MGE research
+    blast_mobileog(prodigal.out.prot_ch.collect(), params.mobileOG_db)
+
+    // Plasmid research
+    blast_plasmidfinder(prodigal.out.genes_ch.collect(), params.plasmidfinder_db)
+
+    // Filtration blast with megares
+    filt_blast_megares(blast_megares.out.megares_ch.collect())
+
+    // Filtration blast with mobileOG
+    filt_blast_mobileog(blast_mobileog.out.mobileog_ch.collect())
+
+    // Filtration blast with plasmidfinder
+    filt_blast_plasmidf(blast_plasmidfinder.out.plasmidf_ch.collect())
+
+    // Genes end cooccurrences research
+    genes_research(filt_blast_megares.out.filt_megares_ch.collect(), filt_blast_mobileog.out.filt_mobileog_ch.collect(), filt_blast_plasmidf.out.filt_plasmidf_ch.collect(), abricate.out.ab_card_ch.collect(), abricate.out.ab_resfinder_ch.collect(), abricate.out.ab_ncbi_ch.collect(), prodigal.out.gbk_ch.collect(), params.mobileog_metadata)
+
     // Binning of assembly
     semibin(medaka.out.polish3_ch.collect(), samtools_2.out.bam2_ch.collect())
  
     // Quality control of binning
     checkm2(semibin.out.bins_dir_ch.collect())
 
-    // Functionnal annotation
-    prodigal(flye.out.asmbl_ch.collect())
-
-    // Annotation
-    prokka(semibin.out.bins_files_ch.collect())
-
-    // ARG research
-    abricate(semibin.out.bins_files_ch.collect())
-
-    // Taxonomy
-    //phylophlan(semibin.out.bins_dir_ch.collect())
-
     // Megares database Indexation
     blast_db_megares(params.db_megares_path)
-
-    // ARG research
-    blast_megares(semibin.out.bins_files_ch.collect(), params.megares_db)
 
     // MobileOG database Indexation
     blast_db_mobileOG(params.db_mobileOG_path)
 
-    // MGE research
-    blast_mobileOG(semibin.out.bins_files_ch.collect(), params.mobileOG_db)
-
     // Plasmidfinder database Indexation
     blast_db_plasmidfinder(params.db_plasmidfinder_path)
 
-    // Plsmids research
-    blast_plasmidfinder(semibin.out.bins_files_ch.collect(), params.plasmidfinder_db)
-
     // Taxonomy
-    //gtdbtk(semibin.out.bins_files_ch.collect(), params.gtdbtk_db)
+    gtdbtk(semibin.out.bins_files_ch.collect())
 
-    // Filtration of Blast + Megares results
-    filtration_blast_megares(blast_megares.out.megares_ch.collect())
-
-    // Filtration of Blast + MobileOG results
-    filtration_blast_mobileOG(blast_mobileOG.out.mobileOG_ch.collect())
+    // Pipeline summary
+    multiqc(params.resultdir)
 }
 
 /*
