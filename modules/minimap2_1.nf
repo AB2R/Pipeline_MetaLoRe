@@ -14,8 +14,8 @@ process minimap2_1 {
 
     // Workflow input stream
     input:
-        path(polish3_ch)
-	path(genes_ch)
+        path(prodigal_ch)
+	path(seqkit_ch)
 
     // Workflow output stream
     output:
@@ -27,6 +27,6 @@ process minimap2_1 {
     // Script to execute (located in bin/ sub-directory)
     script:
     """
-    minimap2_1.sh ${genes_ch} ${polish3_ch} minimap2_1.cmd &> minimap2_1.log 2>&1
+    minimap2_1.sh ${prodigal_ch} ${seqkit_ch} minimap2_1.cmd &> minimap2_1.log 2>&1
     """
 }

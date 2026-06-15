@@ -33,3 +33,19 @@ END {
         print c "\t" len[c] "\t" sum[c]
 }' lengths.txt - > cov.txt
 
+awk '
+{
+    cov = $3 / $2
+    total += cov
+
+    gene[NR] = $1
+    len[NR]  = $2
+    bases[NR] = $3
+    covg[NR] = cov
+}
+END {
+    for(i=1;i<=NR;i++){
+        gcpm = (covg[i] / total) * 1000000
+        print gene[i] "\t" len[i] "\t" bases[i] "\t" gcpm
+    }
+}' cov.txt > gcpm.txt

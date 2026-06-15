@@ -8,7 +8,7 @@ process gtdbtk {
 
     // Result files published in Netxtflow result directory.
     // See also 'output' directive, below.
-    publishDir "${params.resultdir}/7-taxonomy/2-gtdbtk",   mode: 'copy', pattern: 'gtdbtk_out/**'
+    publishDir "${params.resultdir}/7-taxonomy/3-gtdbtk",   mode: 'copy', pattern: 'gtdbtk_out/**'
     publishDir "${params.resultdir}/logs/gtdbtk",     mode: 'copy', pattern: 'gtdbtk.log'
     publishDir "${params.outdir}/00_pipeline_info/cmd", mode: 'copy', pattern: 'gtdbtk.cmd'
 

@@ -18,68 +18,64 @@ The pipeline is ready to use on the Genouest Cluster but it is possible to chang
 - F-Databases
 
 ## A-Pipeline overview
-![Pipeline](images/Pipeline_MetaLoRe.png)
+![Pipeline](images/Pipeline_MetaLoRe.drawio.png)
 
 ## B-Pipeline stages
 ```
 ├──1-qc
 │  ├──1-nanoplot
 │  ├──2-quast
-│  └──3-checkm2
+│  ├──3-checkm2
+│  └──4-multiqc
 │
 ├──2-trimming_filtering
-│  ├──1-porechop_ABI
-│  ├──2-nanofilt
-│  ├──3-collect_read_id
-│  └──4-seqkit
+│  ├──1-seqkit_fastq
+│  ├──2-porechop_ABI
+│  ├──3-nanofilt
+│  ├──4-collect_read_id
+│  └──5-seqkit
 │
 ├──3-assembly_alignment_polishing
 │  ├──1-flye
-│  ├──minimap2_2
-│  ├──racon_1
-│  ├──minimap2_3
-│  ├──racon_2
-│  ├──minimap2_4
-│  ├──samtools_2
-│  └──medaka
+│  ├──2-minimap2_2
+│  ├──3-racon_1
+│  ├──4-minimap2_3
+│  ├──5-racon_2
+│  ├──6-minimap2_4
+│  ├──7-samtools_2
+│  └──8-medaka
 │
 ├──4-binning
-│  └──semibin2
+│  └──1-semibin2
 │
 ├──5-annotation
-│  ├──1-prodigal_reads
-│  ├──2-prodigal_bins
-│  └──3-prokka
+│  └──1-prodigal_reads
 │
-├──6-taxonomy
+├──6-abundance
+│  ├──1-minimap2_1
+│  └──2-samtools_1
+│
+├──7-taxonomie
 │  ├──1-kraken2
-│  └──2-gtdbtk
+│  ├──2-kraken2_asmbl
+│  └──3-gtdbtk
 │
-├──7-genes_research
-│  ├──1-abricate_reads
-│  ├──2-blast_reads
-│  │  ├──1-blast_reads_megares
-│  │  ├──2-blast_reads_mobileOG
-│  │  └──3-blast_reads_plasmidfinder
-│  ├──3-filtration_blast_reads
-│  │  ├──1-filt_blast_reads_megares
-│  │  └──21-filt_blast_reads_mobileOG
-│  ├──4-abricate_bins
-│  ├──5-blast_bins
-│  │  ├──1-blast_bins_megares
-│  │  ├──2-blast_bins_mobileOG
-│  │  └──3-blast_bins_plasmidfinder
-│  └──6-filtration_blast_bins
-│     ├──1-filt_blast_bins_megares
-│     └──2-filt_blast_bins_mobileOG
-│
-└──8-statistics
+└──8-genes_research
+   ├──1-abricate
+   ├──2-blast
+   │  ├──1-blast_megares
+   │  ├──2-blast_mobileOG
+   │  └──3-blast_plasmidfinder
+   ├──3-filtration_blast
+   │  ├──1-filt_blast_megares
+   │  └──21-filt_blast_mobileOG
+   └──4-analysis_genes
 ```
 ## B-Compute requirements
 Recommended compute requirements :
-- CPUs : 32
+- CPUs : 16
 - Memory : 128 GB
-- Approximate run time :
+- Approximate run time : 24h for 3 inputs (300-700Mo)
  
 ## C-Intallation
 Before running the entire pipeline, you need some requirements.
@@ -108,19 +104,19 @@ Download the database Megares (All sequences) using this link :
 
 Create a repertory on the cluster :  
 
-`mkdir databases/Megares_database`
+`mkdir databases/megares_db`
 
 Load the database on the cluster with this command line :  
 
 `scp path/of/the/database/on/your/computer username@genossh.genouest.org:/path/on/the/cluster`
 
 ### Mobile-OG
-Download the database Mobile-OG (Beatrix 1.6 v1) using this link :
+Download the database Mobile-OG (Beatrix 1.6 v1 manually curated) using this link :
 [Mobile-OG database](https://mobileogdb.flsi.cloud.vt.edu/entries/database_download)
 
 Create a repertory on the cluster :  
 
-`mkdir databases/Mobile-OG_database`
+`mkdir databases/mobileog_db`
 
 Load the database on the cluster with this command line :  
 
@@ -128,8 +124,8 @@ Load the database on the cluster with this command line :
 
 Extract the database :
 ```
-cd databases/Mobile-OG_database
-gunzip database_name
+cd databases/mobileog_db
+unzip database_name
 ```
 
 ### PlasmidFinder requirements
@@ -161,16 +157,21 @@ This pipeline was developped with the Nanopore GridION and PromethION Mock Micro
 | [Blast](https://github.com/JacobLondon/Blastn) | 2.17.0 | [Biocontainers_Blast](https://quay.io/repository/biocontainers/blast?tab=tags&tags=2.17.0--h66d330f_0) |
 | [Flye](https://github.com/mikolmogorov/Flye) | 2.9.6 | [Biocontainers_Flye](https://quay.io/repository/biocontainers/flye?tab=tags&tags=2.9.6--py310h275bdba_0) |
 | [Racon](https://github.com/lbcb-sci/racon) | 1.5.0 | [Biocontainers_Racon](https://quay.io/repository/biocontainers/racon?tab=tags&tags=1.5.0--h077b44d_6) |
-| [Medaka](https://github.com/nanoporetech/medaka) | | [Biocontainer_Medaka](https://hub.docker.com/layers/ontresearch/medaka/shacf8338462607b17b1d68dbce212cb93daea50bad/images/sha256-72986cff36dd0f1e55bfa76daa9c2c83d143f946255d9aff5e594e658aeb4ec5)|
+| [Medaka](https://github.com/nanoporetech/medaka) | 2.0.1 | [Biocontainer_Medaka](https://hub.docker.com/layers/ontresearch/medaka/shacf8338462607b17b1d68dbce212cb93daea50bad/images/sha256-72986cff36dd0f1e55bfa76daa9c2c83d143f946255d9aff5e594e658aeb4ec5)|
+| [Quast](https://github.com/ablab/quast) | 5.3.0 | [Biocontainer_Quast](https://quay.io/repository/biocontainers/quast?tab=tags&tags=5.3.0--py313pl5321h5ca1c30_2) |
 | [Minimap2](https://github.com/lh3/minimap2) | 2.30 | [Biocontainer_Minimap2](https://quay.io/repository/biocontainers/minimap2?tab=tags&tags=2.30--h577a1d6_0) |
 | [Samtools](https://github.com/samtools/samtools) | 1.23 | [Biocontainer_Samtools](https://quay.io/repository/biocontainers/samtools?tab=tags&tags=1.23--h96c455f_0) |
-| [Prokka](https://github.com/tseemann/prokka) | 1.15.6 | [Biocontainer_Prokka](https://quay.io/repository/biocontainers/prokka?tab=tags&tags=1.15.6--pl5321hdfd78af_0) |
+| [Semibin2](https://github.com/BigDataBiology/SemiBin) | 2.2.1 | [Biocontainer_Semibin2](https://quay.io/repository/biocontainers/semibin?tab=tags&tags=2.2.1--pyhdfd78af_0) |
+| [CheckM2](https://github.com/chklovski/CheckM2) | 1.1.0 | [Biocontainer_CheckM2](https://quay.io/repository/biocontainers/checkm2?tab=tags&tags=1.1.0--pyh7e72e81_1) |
+| [Gtdb-tk](https://github.com/Ecogenomics/GTDBTk) | 2.6.1 | [Biocontainer_Gtdb-tk](https://quay.io/repository/biocontainers/gtdbtk?tab=tags&tags=2.6.1--pyh1f0d9b5_2) |
+| [MultiQC](https://github.com/MultiQC/MultiQC) | 1.33 | [Biocontainer_MultiQC](https://quay.io/repository/biocontainers/multiqc?tab=tags&tags=1.33--pyhdfd78af_0) |
 
 ## F-Databases
 
 | Databases | Version |
 |:----------|:--------|
 | [CheckM2](https://zenodo.org/record/14897628) | 2.1.11 |
+| [Kraken2_core_nt] | |
 | [Megares](https://www.meglab.org/megares/download/) | 3.0.0 |
 | [MobileOG](https://mobileogdb.flsi.cloud.vt.edu/entries/database_download) | Beatrix 1.6 v1 |
 | [PlasmidFinder](https://bitbucket.org/genomicepidemiology/plasmidfinder_db.git) | 2.2.0 |

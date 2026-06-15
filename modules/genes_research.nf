@@ -21,7 +21,7 @@ process genes_research {
 	path(ab_resfinder_ch)
 	path(ab_ncbi_ch)
 	path(prot_ch)
-	path(params.mobileog_metatdata)
+	path(params.mobileog_metadata)
     // Workflow output stream
     output:
         path("*.tab")
