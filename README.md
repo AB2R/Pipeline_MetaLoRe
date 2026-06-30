@@ -11,11 +11,13 @@ This pipeline was developped to meet several objectives through the analysis of 
 The pipeline is ready to use on the Genouest Cluster but it is possible to change the configuration file.
 ## Table of contents
 - A-Pipeline overview
-- B-Compute requirements
-- C-Installation
-- D-Data
-- E-Tools
-- F-Databases
+- B-Pipeline stages
+- C-Compute requirements
+- D-Installation
+- E-Data
+- F-Running
+- G-Tools
+- H-Databases
 
 ## A-Pipeline overview
 ![Pipeline](images/Pipeline_MetaLoRe.drawio.png)
@@ -70,6 +72,9 @@ The pipeline is ready to use on the Genouest Cluster but it is possible to chang
    │  ├──1-filt_blast_megares
    │  └──21-filt_blast_mobileOG
    └──4-analysis_genes
+      ├──1-genes-research
+      ├──2-cooccurrences_files
+      └──3-cooccurrences_network
 ```
 ## B-Compute requirements
 Recommended compute requirements :
@@ -143,7 +148,14 @@ cat *.fsa > plasmidfinder_all.fasta
 This pipeline was developped with the Nanopore GridION and PromethION Mock Microbial Community Data available on :
 [Data Mockcommunity](https://github.com/LomanLab/mockcommunity)
 
-## E-Tools
+For run the pipeline with your data, you have to create a directory named data and to copy your files into it.
+
+## E-Running
+Run this commandline for running the pipeline on the GenOuest cluster :  
+
+`sbatch run_metalore.slurm`
+
+## F-Tools
 
 | Tools | Version | Biocontainer |
 |:------|:--------|:-------------|
@@ -166,7 +178,7 @@ This pipeline was developped with the Nanopore GridION and PromethION Mock Micro
 | [Gtdb-tk](https://github.com/Ecogenomics/GTDBTk) | 2.6.1 | [Biocontainer_Gtdb-tk](https://quay.io/repository/biocontainers/gtdbtk?tab=tags&tags=2.6.1--pyh1f0d9b5_2) |
 | [MultiQC](https://github.com/MultiQC/MultiQC) | 1.33 | [Biocontainer_MultiQC](https://quay.io/repository/biocontainers/multiqc?tab=tags&tags=1.33--pyhdfd78af_0) |
 
-## F-Databases
+## G-Databases
 
 | Databases | Version |
 |:----------|:--------|
