@@ -22,7 +22,7 @@ process samtools_1 {
     output:
         path("*.bam")
         path("*_sorted.bam")
-	path("*.txt")
+	path("*.txt"), emit: gcpm_ch
         // we also collect commands executed and log files
         path("samtools_1.log")
 

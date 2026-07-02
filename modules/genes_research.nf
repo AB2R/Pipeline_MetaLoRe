@@ -22,15 +22,18 @@ process genes_research {
 	path(ab_ncbi_ch)
 	path(prot_ch)
 	path(params.mobileog_metadata)
+	path(params.genomic_dist)
+	path(filt_megares_ch)
     // Workflow output stream
     output:
-        path("*.tab")
+        path("*resultats_cooccurrences.tab"), emit: coocc_ch
+	path("*resultats_cooccurrences_summary.tab"), emit: coocc_sum_ch
         // we also collect commands executed and log files
         path("cooccurrences_research.log")
 
     // Script to execute (located in bin/ sub-directory)
     script:
     """
-     python ${baseDir}/bin/genes_research.py ${filt_megares_ch} ${filt_mobileog_ch} ${filt_plasmidf_ch} ${ab_card_ch} ${ab_resfinfer_ch} ${ab_ncbi_ch} ${prot_ch} ${params.mobileog_metadata} &> abricate.log 2>&1
+     python ${baseDir}/bin/genes_research.py --blast_megares ${filt_megares_ch} --blast_mobileog ${filt_mobileog_ch} --blast_plasmidfinder ${filt_plasmidf_ch} --abr_card ${ab_card_ch} --abr_resfinder ${ab_resfinder_ch} --abr_ncbiamr ${ab_ncbi_ch} --gbk ${prot_ch} --mobileog_db ${params.mobileog_metadata} --max_distance ${params.genomic_dist} --output \$(basename ${filt_megares_ch}) &> abricate.log 2>&1
     """
 }

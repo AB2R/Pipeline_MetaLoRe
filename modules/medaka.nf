@@ -8,7 +8,7 @@ process medaka {
 
     // Result files published in Netxtflow result directory.
     // See also 'output' directive, below.
-    publishDir "${params.resultdir}/3-assembly_alignment_polishing/8-medaka",   mode: 'copy', pattern: 'medaka_out/*.fasta'
+    publishDir "${params.resultdir}/3-assembly_alignment_polishing/8-medaka",   mode: 'copy', pattern: '*_medaka_out/*.fasta'
     publishDir "${params.resultdir}/logs/medaka",     mode: 'copy', pattern: 'medaka.log'
     publishDir "${params.outdir}/00_pipeline_info/cmd", mode: 'copy', pattern: 'medaka.cmd'
 
@@ -19,7 +19,7 @@ process medaka {
 
     // Workflow output stream
     output:
-        path("medaka_out/*.fasta"), emit: polish3_ch
+        path("*_medaka_out/*.fasta"), emit: polish3_ch
         // we also collect commands executed and log files
         path("medaka.log")
         path("medaka.cmd")
@@ -27,6 +27,6 @@ process medaka {
     // Script to execute (located in bin/ sub-directory)
     script:
     """
-    medaka.sh ${bam2_ch} ${polish2_ch} ${task.cpus} medaka_out ${params.model_medaka} medaka.cmd &> medaka.log 2>&1
+    medaka.sh ${bam2_ch} ${polish2_ch} ${task.cpus} \$(basename \${bam2_ch%%_*})_medaka_out ${params.model_medaka} medaka.cmd &> medaka.log 2>&1
     """
 }

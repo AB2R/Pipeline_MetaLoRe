@@ -30,6 +30,6 @@ process prodigal {
     // Script to execute (located in bin/ sub-directory)
     script:
     """
-    prodigal.sh ${medaka_ch} prodigal.cmd &> prodigal.log 2>&1
+    prodigal.sh ${polish3_ch} prodigal.cmd &> prodigal.log 2>&1
     """
 }

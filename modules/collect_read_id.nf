@@ -25,6 +25,6 @@ process collect_read_id {
     // Script to execute (located in bin/ sub-directory)
     script:
     """
-    python ${baseDir}/bin/collect_read_id.py -i ${kraken_ch} -d ${params.db_kraken} -o read_id.txt &> collect_read_id.log 2>&1
+    python ${baseDir}/bin/collect_read_id.py -i ${kraken_ch} -d ${params.db_kraken} -o \$(basename ${kraken_ch})_read_id.txt &> collect_read_id.log 2>&1
     """
 }
