@@ -70,7 +70,7 @@ The pipeline is ready to use on the Genouest Cluster but it is possible to chang
    │  └──3-blast_plasmidfinder
    ├──3-filtration_blast
    │  ├──1-filt_blast_megares
-   │  └──21-filt_blast_mobileOG
+   │  └──2-filt_blast_mobileOG
    └──4-analysis_genes
       ├──1-genes-research
       ├──2-cooccurrences_files
