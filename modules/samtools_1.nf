@@ -16,13 +16,13 @@ process samtools_1 {
 
     // Workflow input stream
     input:
-        path(aln1_ch)
+        tuple val(sample_id), path(aln1_ch)
 
     // Workflow output stream
     output:
-        path("*.bam")
-        path("*_sorted.bam")
-	path("*.txt"), emit: gcpm_ch
+        tuple val(sample_id), path("*.bam")
+        tuple val(sample_id), path("*_sorted.bam")
+	tuple val(sample_id), path("*.txt"), emit: gcpm_ch
         // we also collect commands executed and log files
         path("samtools_1.log")
 

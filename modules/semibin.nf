@@ -14,13 +14,11 @@ process semibin {
 
     // Workflow input stream
     input:
-        path(polish3_ch)
-	path(bam2_ch)
-
+        tuple val(sample_id), path(polish3_ch), path(bam2_ch)
     // Workflow output stream
     output:
-        path("semibin_out/output_bins"), emit: bins_dir_ch
-	path("semibin_out/output_bins/*.fa.gz"), emit: bins_files_ch
+        tuple val(sample_id), path("semibin_out/output_bins"), emit: bins_dir_ch
+	tuple val(sample_id), path("semibin_out/output_bins/*.fa.gz"), emit: bins_files_ch
         // we also collect commands executed and log files
         path("semibin.log")
         path("semibin.cmd")

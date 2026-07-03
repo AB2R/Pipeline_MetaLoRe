@@ -16,13 +16,13 @@ process prodigal {
 
     // Workflow input stream
     input:
-        path(polish3_ch)
+        tuple val(sample_id), path(polish3_ch)
 
     // Workflow output stream
     output:
-        path("*.faa"), emit: prot_ch
-        path("*.fna"), emit: genes_ch
-        path("*.gbk"), emit: gbk_ch
+        tuple val(sample_id), path("*.faa"), emit: prot_ch
+        tuple val(sample_id), path("*.fna"), emit: genes_ch
+        tuple val(sample_id), path("*.gbk"), emit: gbk_ch
         // we also collect commands executed and log files
         path("prodigal.log")
         path("prodigal.cmd")

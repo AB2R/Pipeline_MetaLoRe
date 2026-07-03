@@ -14,11 +14,11 @@ process porechop_abi {
     
     // Workflow input stream
     input:
-        path(cleanfq_ch)
+        tuple val(sample_id), path(cleanfq_ch)
 
     // Workflow output stream
     output:
-        path("*.fastq"), emit: trim_ch
+        tuple val(sample_id), path("*.fastq"), emit: trim_ch
         // we also collect commands executed and log files
         path("porechop_abi.log")
         path("porechop_abi.cmd")

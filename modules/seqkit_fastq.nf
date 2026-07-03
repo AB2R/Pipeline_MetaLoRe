@@ -14,11 +14,11 @@ process seqkit_fastq {
 
     // Workflow input stream
     input:
-        path(ONT_ch)
+        tuple val(sample_id), path(ONT_ch)
 
     // Workflow output stream
     output:
-        path("*.fastq"), emit: cleanfq_ch
+        tuple val(sample_id), path("*.fastq"), emit: cleanfq_ch
         // we also collect commands executed and log files
         path("seqkit_fastq.log")
         path("seqkit_fastq.cmd")

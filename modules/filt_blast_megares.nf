@@ -14,11 +14,11 @@ process filt_blast_megares {
 
     // Workflow input stream
     input:
-        each(megares_ch)
+        tuple val(sample_id), path(megares_ch)
 
     // Workflow output stream
     output:
-        path("*.tab"), emit: filt_megares_ch
+        tuple val(sample_id), path("*.tab"), emit: filt_megares_ch
         // we also collect commands executed and log files
         path("filt_blast_megares.log")
 

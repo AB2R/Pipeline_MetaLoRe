@@ -14,11 +14,11 @@ process flye {
 
     // Workflow input stream
     input:
-        path(id2_ch)
+        tuple val(sample_id), path(id2_ch)
 
     // Workflow output stream
     output:
-        path("*_flye_out/assembly.fasta"), emit: asmbl_ch
+        tuple val(sample_id), path("*_flye_out/assembly.fasta"), emit: asmbl_ch
         // we also collect commands executed and log files
         path("flye.log")
         path("flye.cmd")
@@ -26,6 +26,6 @@ process flye {
     // Script to execute (located in bin/ sub-directory)
     script:
     """
-    flye.sh ${id2_ch} \$(basename \${id2_ch%%_*})_flye_out ${task.cpus} flye.cmd &> flye.log 2>&1
+    flye.sh ${id2_ch} \$(basename ${id2_ch})_flye_out ${task.cpus} flye.cmd &> flye.log 2>&1
     """
 }

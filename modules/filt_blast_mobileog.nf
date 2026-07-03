@@ -14,11 +14,11 @@ process filt_blast_mobileog {
 
     // Workflow input stream
     input:
-        each(mobileog_ch)
+        tuple val(sample_id), path(mobileog_ch)
 
     // Workflow output stream
     output:
-        path("*.tab"), emit: filt_mobileog_ch
+        tuple val(sample_id), path("*.tab"), emit: filt_mobileog_ch
         // we also collect commands executed and log files
         path("filt_blast_mobileog.log")
 

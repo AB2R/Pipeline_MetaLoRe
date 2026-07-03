@@ -14,11 +14,11 @@ process nanofilt {
 
     // Workflow input stream
     input:
-        path(trim_ch)
+        tuple val(sample_id), path(trim_ch)
 
     // Workflow output stream
     output:
-        path("*.fastq"), emit: filt_ch
+        tuple val(sample_id), path("*.fastq"), emit: filt_ch
         // we also collect commands executed and log files
         path("nanofilt.log")
         path("nanofilt.cmd")

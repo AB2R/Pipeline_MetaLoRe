@@ -14,11 +14,11 @@ process collect_read_id {
 
     // Workflow input stream
     input:
-        path(kraken_ch)
+        tuple val(sample_id), path(kraken_ch)
 
     // Workflow output stream
     output:
-        path("*.txt"), emit: id_ch
+        tuple val(sample_id), path("*.txt"), emit: id_ch
         // we also collect commands executed and log files
         path("collect_read_id.log")
 

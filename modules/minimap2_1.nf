@@ -14,12 +14,10 @@ process minimap2_1 {
 
     // Workflow input stream
     input:
-        path(prodigal_ch)
-	path(seqkit_ch)
-
+        tuple val(sample_id), path(prodigal_ch), path(seqkit_ch)
     // Workflow output stream
     output:
-        path("*.sam"), emit: aln1_ch
+        tuple val(sample_id), path("*.sam"), emit: aln1_ch
         // we also collect commands executed and log files
         path("minimap2_1.log")
         path("minimap2_1.cmd")

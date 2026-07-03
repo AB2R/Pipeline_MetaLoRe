@@ -14,12 +14,10 @@ process medaka {
 
     // Workflow input stream
     input:
-        path(bam2_ch)
-        path(polish2_ch)
-
+        tuple val(sample_id), path(bam2_ch), path(polish2_ch)
     // Workflow output stream
     output:
-        path("*_medaka_out/*.fasta"), emit: polish3_ch
+        tuple val(sample_id), path("*_medaka_out/*.fasta"), emit: polish3_ch
         // we also collect commands executed and log files
         path("medaka.log")
         path("medaka.cmd")
@@ -27,6 +25,6 @@ process medaka {
     // Script to execute (located in bin/ sub-directory)
     script:
     """
-    medaka.sh ${bam2_ch} ${polish2_ch} ${task.cpus} \$(basename \${bam2_ch%%_*})_medaka_out ${params.model_medaka} medaka.cmd &> medaka.log 2>&1
+    medaka.sh ${bam2_ch} ${polish2_ch} ${task.cpus} \$(basename ${bam2_ch})_medaka_out ${params.model_medaka} medaka.cmd &> medaka.log 2>&1
     """
 }

@@ -15,12 +15,12 @@ process kraken2_asmbl {
 
     // Workflow input stream
     input:
-        path(polish3_ch)
+        tuple val(sample_id), path(polish3_ch)
 
     // Workflow output stream
     output:
-        path("*.kraken")
-        path("*.report")
+        tuple val(sample_id), path("*.kraken")
+        tuple val(sample_id), path("*.report")
         // we also collect commands executed and log files
         path("kraken2_asmbl.log")
         path("kraken2_asmbl.cmd")

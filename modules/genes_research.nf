@@ -8,26 +8,19 @@ process genes_research {
 
     // Result files published in Netxtflow result directory.
     // See also 'output' directive, below.
-    publishDir "${params.resultdir}/8-genes_research/4-cooccurrences_research",   mode: 'copy', pattern: '*.tab'
+    publishDir "${params.resultdir}/8-genes_research/4-cooccurrences_research",   mode: 'copy', pattern: '*.tsv'
     publishDir "${params.resultdir}/logs/cooccurrences_research",     mode: 'copy', pattern: 'cooccurrences_research.log'
     publishDir "${params.outdir}/00_pipeline_info/cmd", mode: 'copy', pattern: 'cooccurrences_research.cmd'
 
     // Workflow input stream
     input:
-        path(filt_megares_ch)
-	path(filt_mobileog_ch)
-	path(filt_plasmidf_ch)
-	path(ab_card_ch)
-	path(ab_resfinder_ch)
-	path(ab_ncbi_ch)
-	path(prot_ch)
+        tuple val(sample_id), path(filt_megares_ch), path(filt_mobileog_ch), path(filt_plasmidf_ch), path(ab_card_ch), path(ab_resfinder_ch), path(ab_ncbi_ch), path(prot_ch)
 	path(params.mobileog_metadata)
-	path(params.genomic_dist)
-	path(filt_megares_ch)
+	val(params.genomic_dist)
     // Workflow output stream
     output:
-        path("*resultats_cooccurrences.tab"), emit: coocc_ch
-	path("*resultats_cooccurrences_summary.tab"), emit: coocc_sum_ch
+        tuple val(sample_id), path("*_cooccurrences.tsv"), emit: coocc_ch
+	tuple val(sample_id), path("*_cooccurrences_summary.tsv"), emit: coocc_sum_ch
         // we also collect commands executed and log files
         path("cooccurrences_research.log")
 

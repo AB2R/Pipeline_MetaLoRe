@@ -15,12 +15,12 @@ process kraken2 {
 
     // Workflow input stream
     input:
-        path(filt_ch)
+        tuple val(sample_id), path(filt_ch)
 
     // Workflow output stream
     output:
-        path("*.kraken"), emit: kraken_ch
-	path("*.report"), emit: kraken_report_ch
+        tuple val(sample_id), path("*.kraken"), emit: kraken_ch
+	tuple val(sample_id), path("*.report"), emit: kraken_report_ch
         // we also collect commands executed and log files
         path("kraken2.log")
         path("kraken2.cmd")

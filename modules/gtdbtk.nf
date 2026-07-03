@@ -14,11 +14,11 @@ process gtdbtk {
 
     // Workflow input stream
     input:
-        each(bins_files_ch)
+        tuple val(sample_id), path(bins_flat_ch)
 
     // Workflow output stream
     output:
-        path("gtdbtk_out/**")
+        tuple val(sample_id), path("gtdbtk_out/**")
         // we also collect commands executed and log files
         path("gtdbtk.log")
         path("gtdbtk.cmd")
@@ -26,6 +26,6 @@ process gtdbtk {
     // Script to execute (located in bin/ sub-directory)
     script:
     """
-    gtdbtk.sh ${bins_files_ch} gtdbtk_out ${task.cpus} gtdbtk.cmd &> gtdbtk.log 2>&1
+    gtdbtk.sh ${bins_flat_ch} gtdbtk_out ${task.cpus} gtdbtk.cmd &> gtdbtk.log 2>&1
     """
 }

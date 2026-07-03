@@ -14,12 +14,12 @@ process blast_plasmidfinder {
 
     // Workflow input stream
     input:
-        each(genes_ch)
+        tuple val(sample_id), path(genes_ch)
         path(params.plasmidfinder_db)
 
     // Workflow output stream
     output:
-        path("*.tab"), emit: plasmidf_ch
+        tuple val(sample_id), path("*.tab"), emit: plasmidf_ch
         // we also collect commands executed and log files
         path("blast_plasmidfinder.log")
 

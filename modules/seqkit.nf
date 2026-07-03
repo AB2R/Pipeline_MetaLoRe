@@ -14,12 +14,10 @@ process seqkit {
 
     // Workflow input stream
     input:
-        path(id_ch)
-        path(filt_ch)
-
+        tuple val(sample_id), path(id_ch), path(filt_ch)
     // Workflow output stream
     output:
-        path("*.fasta"), emit: id2_ch
+        tuple val(sample_id), path("*.fasta"), emit: id2_ch
         // we also collect commands executed and log files
         path("seqkit.log")
         path("seqkit.cmd")

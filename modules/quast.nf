@@ -14,13 +14,10 @@ process quast {
 
     // Workflow input stream
     input:
-	path(asmbl_ch)
-	path(polish2_ch)
-        path(polish3_ch)
-
+	tuple val(sample_id), path(asmbl_ch), path(polish2_ch), path(polish3_ch)
     // Workflow output stream
     output:
-        path("quast_out")
+        tuple val(sample_id), path("quast_out")
         // we also collect commands executed and log files
         path("quast.log")
         path("quast.cmd")

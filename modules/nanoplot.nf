@@ -14,11 +14,11 @@ process nanoplot {
     
     // Workflow input stream
     input:
-        path(ONT_ch)
+        tuple val(sample_id), path(ONT_ch)
 
     // Workflow output stream
     output:
-        path("*_nanoqc*")
+        tuple val(sample_id), path("*_nanoqc*")
         // we also collect commands executed and log files
         path("nanoplot.log")
         path("nanoplot.cmd")

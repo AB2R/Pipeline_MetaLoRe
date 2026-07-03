@@ -14,11 +14,11 @@ process samtools_2 {
 
     // Workflow input stream
     input:
-        path(aln4_ch)
+        tuple val(sample_id), path(aln4_ch)
 
     // Workflow output stream
     output:
-        path("*.bam"), emit: bam2_ch
+        tuple val(sample_id), path("*.bam"), emit: bam2_ch
         // we also collect commands executed and log files
         path("samtools_2.log")
         path("samtools_2.cmd")

@@ -16,12 +16,12 @@ process abricate {
 
     // Workflow input stream
     input:
-        path(genes_ch)
+        tuple val(sample_id), path(genes_ch)
     // Workflow output stream
     output:
-        path("*ncbi.tab"), emit: ab_ncbi_ch
-        path("*card.tab"), emit: ab_card_ch
-        path("*resfinder.tab"), emit: ab_resfinder_ch
+        tuple val(sample_id), path("*ncbi.tab"), emit: ab_ncbi_ch
+        tuple val(sample_id), path("*card.tab"), emit: ab_card_ch
+        tuple val(sample_id), path("*resfinder.tab"), emit: ab_resfinder_ch
         // we also collect commands executed and log files
         path("abricate.log")
         path("abricate.cmd")

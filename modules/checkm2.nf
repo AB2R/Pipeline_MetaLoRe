@@ -14,11 +14,11 @@ process checkm2 {
 
     // Workflow input stream
     input:
-        path(bins_dir_ch)
+        tuple val(sample_id), path(bins_dir_ch)
 
     // Workflow output stream
     output:
-        path("checkm2_out")
+        tuple val(sample_id), path("checkm2_out")
         // we also collect commands executed and log files
         path("checkm2.log")
         path("checkm2.cmd")

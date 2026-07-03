@@ -14,12 +14,12 @@ process blast_megares {
 
     // Workflow input stream
     input:
-        path(genes_ch)
+        tuple val(sample_id), path(genes_ch)
         path(params.megares_db)
 
     // Workflow output stream
     output:
-        path("*.tab"), emit: megares_ch
+        tuple val(sample_id), path("*.tab"), emit: megares_ch
         // we also collect commands executed and log files
         path("blast_megares.log")
 

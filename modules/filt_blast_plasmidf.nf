@@ -14,11 +14,11 @@ process filt_blast_plasmidf {
 
     // Workflow input stream
     input:
-        each(plasmidf_ch)
+        tuple val(sample_id), path(plasmidf_ch)
 
     // Workflow output stream
     output:
-        path("*.tab"), emit: filt_plasmidf_ch
+        tuple val(sample_id), path("*.tab"), emit: filt_plasmidf_ch
         // we also collect commands executed and log files
         path("filt_blast_plasmidf.log")
 
