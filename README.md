@@ -155,6 +155,9 @@ Run this commandline for running the pipeline on the GenOuest cluster :
 
 `sbatch run_metalore.slurm`
 
+To follow the execution you can run :  
+`tail -f metalore.log`
+
 ## F-Tools
 
 | Tools | Version | Biocontainer |
