@@ -26,5 +26,6 @@ process medaka {
     script:
     """
     medaka.sh ${bam2_ch} ${polish2_ch} ${task.cpus} \$(basename ${bam2_ch})_medaka_out ${params.model_medaka} medaka.cmd &> medaka.log 2>&1
+    mv \$(basename ${bam2_ch})_medaka_out/consensus.fasta \$(basename ${bam2_ch})_medaka_out/${sample_id}_consensus.fasta
     """
 }

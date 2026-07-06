@@ -27,6 +27,6 @@ process genes_research {
     // Script to execute (located in bin/ sub-directory)
     script:
     """
-     python ${baseDir}/bin/genes_research.py --blast_megares ${filt_megares_ch} --blast_mobileog ${filt_mobileog_ch} --blast_plasmidfinder ${filt_plasmidf_ch} --abr_card ${ab_card_ch} --abr_resfinder ${ab_resfinder_ch} --abr_ncbiamr ${ab_ncbi_ch} --gbk ${prot_ch} --mobileog_db ${params.mobileog_metadata} --max_distance ${params.genomic_dist} --output \$(basename ${filt_megares_ch}) &> abricate.log 2>&1
+     python ${baseDir}/bin/genes_research.py --blast_megares ${filt_megares_ch} --blast_mobileog ${filt_mobileog_ch} --blast_plasmidfinder ${filt_plasmidf_ch} --abr_card ${ab_card_ch} --abr_resfinder ${ab_resfinder_ch} --abr_ncbiamr ${ab_ncbi_ch} --gbk ${prot_ch} --mobileog_db ${params.mobileog_metadata} --max_distance ${params.genomic_dist} --output \$(basename ${filt_megares_ch}) &> cooccurrences_research.log 2>&1
     """
 }
