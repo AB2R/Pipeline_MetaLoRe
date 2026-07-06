@@ -8,7 +8,7 @@ process cooccurrences_network {
 
     // Result files published in Netxtflow result directory.
     // See also 'output' directive, below.
-    publishDir "${params.resultdir}/8-genes_research/6-cooccurrences_network",   mode: 'copy', pattern: '*.png'
+    publishDir "${params.resultdir}/8-genes_research/4-cooccurrences/3-cooccurrences_network",   mode: 'copy', pattern: '*.png'
     publishDir "${params.resultdir}/logs/cooccurrences_network",     mode: 'copy', pattern: 'cooccurrences_network.log'
     publishDir "${params.outdir}/00_pipeline_info/cmd", mode: 'copy', pattern: 'cooccurrences_network.cmd'
 
