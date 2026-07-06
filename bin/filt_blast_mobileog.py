@@ -4,11 +4,16 @@ from pathlib import Path
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("-i", "--input", type=str, help="Blast with Mobileog results input file")
+    parser.add_argument("-o", "--output", type=str, help="Filtering results from Blast with MobileOG output file")
 
     args = parser.parse_args()
 
     input_path = Path(args.input)
-    output_file = Path(f"{input_path.stem}_filtered{input_path.suffix}")
+
+    if args.output is None:
+        output_file = Path(f"{input_path.stem}_filtered{input_path.suffix}")
+    else:
+        output_file = Path(args.output)
 
     best_hits = {}
 

@@ -59,7 +59,7 @@ def parse_blast(filepath, source, category, gbk_positions=None):
     n_no_pos = 0
     with open(filepath) as f:
         for line in f:
-            cols = line.strip().split(";")
+            cols = line.strip().split("\t")
             if len(cols) < 12:
                 continue
             cds_id = cols[0]                              # ex: contig_1097_18
@@ -306,6 +306,13 @@ def main():
 
     if df_coocc.empty:
         print("Aucune co-occurrence trouvée.")
+        pd.DataFrame(columns=["contig", "gene1", "category1", "source1", "start1", "end1",
+        "gene2", "category2", "source2", "start2", "end2", "distance_bp",]).to_csv(
+        f"{args.output}_cooccurrences.tsv", sep="\t", index=False
+        )
+        pd.DataFrame(columns=["paire", "count"]).to_csv(
+        f"{args.output}_cooccurrences_summary.tsv", sep="\t", index=False
+        )
     else:
         df_coocc.to_csv(f"{args.output}_cooccurrences.tsv", sep="\t", index=False)
         print(f"Co-occurrences trouvées : {len(df_coocc)}")

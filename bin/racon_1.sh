@@ -9,7 +9,7 @@ NCPUS=${args[3]}
 LOGCMD=${args[4]}
 
 # Commande to execute
-CMD="racon ${FASTQ_FILE} ${SAM} ${FASTA_FILE} -t ${NCPUS} > racon.fasta"
+CMD="racon ${FASTQ_FILE} ${SAM} ${FASTA_FILE} -t ${NCPUS} > $(basename ${FASTQ_FILE%%_*})_racon.fasta"
 
 # Save command in log
 echo ${CMD} > ${LOGCMD}

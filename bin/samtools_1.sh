@@ -8,6 +8,9 @@ LOGCMD=${args[2]}
 
 BAM=${SAM_FILE%%_*}.bam
 SORTED_BAM=${SAM_FILE%%_*}_sorted.bam
+LENGTHS=${SAM_FILE%%_*}_lengths.txt
+COV=${SAM_FILE%%_*}_cov.txt
+GCPM=${SAM_FILE%%_*}_gcpm.txt
 
 # Commande to execute
 samtools view -bS -@ ${NCPUS} ${SAM_FILE} > ${BAM}
@@ -23,7 +26,7 @@ samtools view -H ${SORTED_BAM} \
         if($i ~ /^LN:/) ln=substr($i,4);
     }
     print sn "\t" ln
-}' > lengths.txt
+}' > ${LENGTHS}
 
 samtools depth -a ${SORTED_BAM} \
 | awk 'NR==FNR {len[$1]=$2; next}
@@ -31,7 +34,7 @@ samtools depth -a ${SORTED_BAM} \
 END {
     for (c in sum)
         print c "\t" len[c] "\t" sum[c]
-}' lengths.txt - > cov.txt
+}' ${LENGTHS} - > ${COV}
 
 awk '
 {
@@ -48,4 +51,4 @@ END {
         gcpm = (covg[i] / total) * 1000000
         print gene[i] "\t" len[i] "\t" bases[i] "\t" gcpm
     }
-}' cov.txt > gcpm.txt
+}' ${COV} > ${GCPM}
