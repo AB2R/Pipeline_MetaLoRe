@@ -114,7 +114,7 @@ include { blast_plasmidfinder }       from './modules/blast_plasmidfinder'
 include { filt_blast_megares }        from './modules/filt_blast_megares'
 include { filt_blast_mobileog }       from './modules/filt_blast_mobileog.nf'
 include { filt_blast_plasmidf }       from './modules/filt_blast_plasmidf.nf'
-include { genes_research }            from './modules/genes_research.nf'
+include { cooccurrences_research }    from './modules/cooccurrences_research.nf'
 include { cooccurrences_files }       from './modules/cooccurrences_files.nf'
 include { cooccurrences_network }     from './modules/cooccurrences_network.nf'
 include { semibin }                   from './modules/semibin.nf'
@@ -217,11 +217,11 @@ workflow {
     // Filtration blast with plasmidfinder
     filt_blast_plasmidf(blast_plasmidfinder.out.plasmidf_ch)
 
-    // Genes end cooccurrences research
-    genes_research(filt_blast_megares.out.filt_megares_ch.join(filt_blast_mobileog.out.filt_mobileog_ch).join(filt_blast_plasmidf.out.filt_plasmidf_ch).join(abricate.out.ab_card_ch).join(abricate.out.ab_resfinder_ch).join(abricate.out.ab_ncbi_ch).join(prodigal.out.gbk_ch), params.mobileog_metadata, params.genomic_dist)
+    // Cooccurrences research
+    cooccurrences_research(filt_blast_megares.out.filt_megares_ch.join(filt_blast_mobileog.out.filt_mobileog_ch).join(filt_blast_plasmidf.out.filt_plasmidf_ch).join(abricate.out.ab_card_ch).join(abricate.out.ab_resfinder_ch).join(abricate.out.ab_ncbi_ch).join(prodigal.out.gbk_ch), params.mobileog_metadata, params.genomic_dist)
 
     // Files for co-occurrences network
-    cooccurrences_files(genes_research.out.coocc_ch.join(genes_research.out.coocc_sum_ch).join(samtools_1.out.gcpm_ch).toSortedList{a, b->["E1-1", "H1-8", "C3-1"].indexOf(a[0])<=>["E1-1", "H1-8", "C3-1"].indexOf(b[0])}.map{l->tuple(l.collect{it[1]},l.collect{it[2]},l.collect{it[3].find{f->f.name.endsWith("_gcpm.txt")}})})
+    cooccurrences_files(cooccurrences_research.out.coocc_ch.join(cooccurrences_research.out.coocc_sum_ch).join(samtools_1.out.gcpm_ch).toSortedList{a, b->["E1-1", "H1-8", "C3-1"].indexOf(a[0])<=>["E1-1", "H1-8", "C3-1"].indexOf(b[0])}.map{l->tuple(l.collect{it[1]},l.collect{it[2]},l.collect{it[3].find{f->f.name.endsWith("_gcpm.txt")}})})
 
     // Co-occurrences network
     cooccurrences_network(cooccurrences_files.out.edges_ch.combine(cooccurrences_files.out.nodes_ch))
