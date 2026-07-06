@@ -1,5 +1,4 @@
 #!/usr/bin/env nextflow
-
 nextflow.enable.dsl=2
 
 def helpMessage() {
@@ -28,6 +27,7 @@ Mandatory:
 --mobileOG_db           [path]  Absolute path to mobileOG database and index
 --db_plasmidfinder      [path}  Absolute path to plasmidfinder database and index
 --gtdbtk_db             [path]  Absolute path to gtdbtk database
+--genomic_dist          [str]   Value of the genomic distance to consider co-occurrences
     
 Other options:
 --outdir                [path]	The output directory where the results will be saved.
@@ -77,6 +77,7 @@ summary['Megares database'] = params.megares_db
 summary['MobileOG database'] = params.mobileOG_db
 summary['Plasmidfinder database'] = params.plasmidfinder_db
 summary['Gtdbtk database'] = params.gtdbtk_db
+summary['Genomic distance'] = params.genomic_dist
 log.info summary.collect { k,v -> "${k.padRight(18)}: $v" }.join("\n")
 log.info "-\033[91m--------------------------------------------------\033[0m-"
 
@@ -114,6 +115,8 @@ include { filt_blast_megares }        from './modules/filt_blast_megares'
 include { filt_blast_mobileog }       from './modules/filt_blast_mobileog.nf'
 include { filt_blast_plasmidf }       from './modules/filt_blast_plasmidf.nf'
 include { genes_research }            from './modules/genes_research.nf'
+include { cooccurrences_files }       from './modules/cooccurrences_files.nf'
+include { cooccurrences_network }     from './modules/cooccurrences_network.nf'
 include { semibin }                   from './modules/semibin.nf'
 include { checkm2 }                   from './modules/checkm2.nf'
 include { blast_db_megares }          from './modules/blast_db_megares.nf'
@@ -125,7 +128,8 @@ include { multiqc }                   from './modules/multiqc.nf'
 /*
  * CREATE INPUT CHANNELS
  */
-ONT_ch = Channel.fromPath("${params.ONT_path}")
+ONT_ch = Channel.fromPath("${params.ONT_path}").map{file->tuple(file.name.replace("_raw_reads.gz", ""),file)}
+results_ch = Channel.fromPath("${params.resultdir}")
 
 /*
  * RUN MAIN WORKFLOW
@@ -139,88 +143,94 @@ workflow {
     seqkit_fastq(ONT_ch)
 
     // Trimming of ONT raw read
-    porechop_abi(seqkit_fastq.out.cleanfq_ch.collect())
+    porechop_abi(seqkit_fastq.out.cleanfq_ch)
 
     // Filtering of ONT raw data
-    nanofilt(porechop_abi.out.trim_ch.collect())
+    nanofilt(porechop_abi.out.trim_ch)
 
     // Taxonomic classification
-    kraken2(nanofilt.out.filt_ch.collect())
+    kraken2(nanofilt.out.filt_ch)
 
     // Read ID collection
-    collect_read_id(kraken2.out.kraken_ch.collect())
+    collect_read_id(kraken2.out.kraken_ch)
 
     // Read extraction
-    seqkit(collect_read_id.out.id_ch.collect(), nanofilt.out.filt_ch.collect())
+    seqkit(collect_read_id.out.id_ch.join(nanofilt.out.filt_ch))
 
     // Assembly 
-    flye(seqkit.out.id2_ch.collect())
+    flye(seqkit.out.id2_ch)
 
     // Mappinf ONT reads on assembly
-    minimap2_2(flye.out.asmbl_ch.collect(), seqkit.out.id2_ch.collect())
+    minimap2_2(flye.out.asmbl_ch.join(seqkit.out.id2_ch))
 
     // Polishing assembly reads
-    racon_1(seqkit.out.id2_ch.collect(), minimap2_2.out.aln2_ch.collect(), flye.out.asmbl_ch.collect())
+    racon_1(seqkit.out.id2_ch.join(minimap2_2.out.aln2_ch).join(flye.out.asmbl_ch))
 
     // Alignment on polish assembly
-    minimap2_3(racon_1.out.polish1_ch.collect(), seqkit.out.id2_ch.collect())
+    minimap2_3(racon_1.out.polish1_ch.join(seqkit.out.id2_ch))
 
     // Polishing assembly reads
-    racon_2(seqkit.out.id2_ch.collect(), minimap2_3.out.aln3_ch.collect(), racon_1.out.polish1_ch.collect())
+    racon_2(seqkit.out.id2_ch.join(minimap2_3.out.aln3_ch).join(racon_1.out.polish1_ch))
 
     // Alignment on polish assembly
-    minimap2_4(racon_2.out.polish2_ch.collect(), seqkit.out.id2_ch.collect())
+    minimap2_4(racon_2.out.polish2_ch.join(seqkit.out.id2_ch))
 
     // Sorting alignments
-    samtools_2(minimap2_4.out.aln4_ch.collect())
+    samtools_2(minimap2_4.out.aln4_ch)
 
     // Polishing assembly reads
-    medaka(samtools_2.out.bam2_ch.collect(), racon_2.out.polish2_ch.collect())
+    medaka(samtools_2.out.bam2_ch.join(racon_2.out.polish2_ch))
 
     // Quality control of assembly
-    quast(flye.out.asmbl_ch.collect(), racon_2.out.polish2_ch.collect(), medaka.out.polish3_ch.collect())
+    quast(flye.out.asmbl_ch.join(racon_2.out.polish2_ch).join(medaka.out.polish3_ch))
 
     // Taxonomic classification on assembly
-    kraken2_asmbl(medaka.out.polish3_ch.collect())
+    kraken2_asmbl(medaka.out.polish3_ch)
 
     // prodigal on assembly
-    prodigal(medaka.out.polish3_ch.collect())
+    prodigal(medaka.out.polish3_ch)
 
     // Mapping reads on genes provide by Prodigal
-    minimap2_1(prodigal.out.genes_ch.collect(), seqkit.out.id2_ch.collect())
+    minimap2_1(prodigal.out.genes_ch.join(seqkit.out.id2_ch))
 
     // Abundance matrix
-    samtools_1(minimap2_1.out.aln1_ch.collect())
+    samtools_1(minimap2_1.out.aln1_ch)
 
     // ARG/BRG/MGE/PLASMID research
-    abricate(prodigal.out.genes_ch.collect())
+    abricate(prodigal.out.genes_ch)
 
     // BRG research
-    blast_megares(prodigal.out.genes_ch.collect(), params.megares_db)
+    blast_megares(prodigal.out.genes_ch, params.megares_db)
 
     // MGE research
-    blast_mobileog(prodigal.out.prot_ch.collect(), params.mobileOG_db)
+    blast_mobileog(prodigal.out.prot_ch, params.mobileOG_db)
 
     // Plasmid research
-    blast_plasmidfinder(prodigal.out.genes_ch.collect(), params.plasmidfinder_db)
+    blast_plasmidfinder(prodigal.out.genes_ch, params.plasmidfinder_db)
 
     // Filtration blast with megares
-    filt_blast_megares(blast_megares.out.megares_ch.collect())
+    filt_blast_megares(blast_megares.out.megares_ch)
 
     // Filtration blast with mobileOG
-    filt_blast_mobileog(blast_mobileog.out.mobileog_ch.collect())
+    filt_blast_mobileog(blast_mobileog.out.mobileog_ch)
 
     // Filtration blast with plasmidfinder
-    filt_blast_plasmidf(blast_plasmidfinder.out.plasmidf_ch.collect())
+    filt_blast_plasmidf(blast_plasmidfinder.out.plasmidf_ch)
 
     // Genes end cooccurrences research
-    genes_research(filt_blast_megares.out.filt_megares_ch.collect(), filt_blast_mobileog.out.filt_mobileog_ch.collect(), filt_blast_plasmidf.out.filt_plasmidf_ch.collect(), abricate.out.ab_card_ch.collect(), abricate.out.ab_resfinder_ch.collect(), abricate.out.ab_ncbi_ch.collect(), prodigal.out.gbk_ch.collect(), params.mobileog_metadata)
+    genes_research(filt_blast_megares.out.filt_megares_ch.join(filt_blast_mobileog.out.filt_mobileog_ch).join(filt_blast_plasmidf.out.filt_plasmidf_ch).join(abricate.out.ab_card_ch).join(abricate.out.ab_resfinder_ch).join(abricate.out.ab_ncbi_ch).join(prodigal.out.gbk_ch), params.mobileog_metadata, params.genomic_dist)
+
+    // Files for co-occurrences network
+    cooccurrences_files(genes_research.out.coocc_ch.join(genes_research.out.coocc_sum_ch).join(samtools_1.out.gcpm_ch).toSortedList{a, b->["E1-1", "H1-8", "C3-1"].indexOf(a[0])<=>["E1-1", "H1-8", "C3-1"].indexOf(b[0])}.map{l->tuple(l.collect{it[1]},l.collect{it[2]},l.collect{it[3].find{f->f.name.endsWith("_gcpm.txt")}})})
+
+    // Co-occurrences network
+    cooccurrences_network(cooccurrences_files.out.edges_ch.combine(cooccurrences_files.out.nodes_ch))
 
     // Binning of assembly
-    semibin(medaka.out.polish3_ch.collect(), samtools_2.out.bam2_ch.collect())
+    semibin(medaka.out.polish3_ch.join(samtools_2.out.bam2_ch))
  
     // Quality control of binning
-    checkm2(semibin.out.bins_dir_ch.collect())
+    checkm2(semibin.out.bins_dir_ch)
 
     // Megares database Indexation
     blast_db_megares(params.db_megares_path)
@@ -231,11 +241,13 @@ workflow {
     // Plasmidfinder database Indexation
     blast_db_plasmidfinder(params.db_plasmidfinder_path)
 
+    bins_flat_ch = semibin.out.bins_files_ch.flatMap{sample_id, bins->bins.collect{bin->tuple(sample_id, bin)}}
+
     // Taxonomy
-    gtdbtk(semibin.out.bins_files_ch.collect())
+    gtdbtk(bins_flat_ch)
 
     // Pipeline summary
-    multiqc(params.resultdir)
+    multiqc(results_ch.flatten())
 }
 
 /*
