@@ -19,7 +19,7 @@ process kraken2_asmbl {
 
     // Workflow output stream
     output:
-        tuple val(sample_id), path("*.kraken")
+        tuple val(sample_id), path("*.kraken"), emit: kraken_asmbl_ch
         tuple val(sample_id), path("*.report")
         // we also collect commands executed and log files
         path("kraken2_asmbl.log")

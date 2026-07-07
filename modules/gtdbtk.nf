@@ -18,7 +18,7 @@ process gtdbtk {
 
     // Workflow output stream
     output:
-        tuple val(sample_id), path("gtdbtk_out/**")
+        tuple val(sample_id), path("gtdbtk_out/**"), emit: gtdbtk_ch
         // we also collect commands executed and log files
         path("gtdbtk.log")
         path("gtdbtk.cmd")
