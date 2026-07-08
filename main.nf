@@ -245,46 +245,10 @@ workflow {
     // Taxonomy
     gtdbtk(bins_flat_ch)
 
-    multiqc_ch = nanoplot.out.nanoqc_ch
-    .mix(seqkit_fastq.out.cleanfq_ch)
-    .mix(porechop_abi.out.trim_ch)
-    .mix(nanofilt.out.filt_ch)
-    .mix(kraken2.out.kraken_ch)
-    .mix(collect_read_id.out.id_ch)
-    .mix(seqkit.out.id2_ch)
-    .mix(flye.out.asmbl_ch)
-    .mix(minimap2_2.out.aln2_ch)
-    .mix(racon_1.out.polish1_ch)
-    .mix(minimap2_3.out.aln3_ch)
-    .mix(racon_2.out.polish2_ch)
-    .mix(minimap2_4.out.aln4_ch)
-    .mix(samtools_2.out.bam2_ch)
-    .mix(medaka.out.polish3_ch)
-    .mix(kraken2_asmbl.out.kraken_asmbl_ch)
-    .mix(prodigal.out.genes_ch)
-    .mix(prodigal.out.prot_ch)
-    .mix(minimap2_1.out.aln1_ch)
-    .mix(blast_megares.out.megares_ch)
-    .mix(blast_mobileog.out.mobileog_ch)
-    .mix(blast_plasmidfinder.out.plasmidf_ch)
-    .mix(filt_blast_megares.out.filt_megares_ch)
-    .mix(filt_blast_mobileog.out.filt_mobileog_ch)
-    .mix(filt_blast_plasmidf.out.filt_plasmidf_ch)
-    .mix(abricate.out.ab_card_ch)
-    .mix(abricate.out.ab_ncbi_ch)
-    .mix(abricate.out.ab_resfinder_ch)
-    .mix(prodigal.out.gbk_ch)
-    .mix(cooccurrences_research.out.coocc_ch)
-    .mix(cooccurrences_research.out.coocc_sum_ch)
-    .mix(samtools_1.out.gcpm_ch)
-    .mix(cooccurrences_files.out.edges_ch)
-    .mix(cooccurrences_files.out.nodes_ch)
-    .mix(semibin.out.bins_dir_ch)
-    .mix(gtdbtk.out.gtdbtk_ch)
-    .collect()
+    results_ch = Channel.fromPath("${params.resultdir}").collect().ifEmpty([])
 
     // Pipeline summary
-    multiqc(multiqc_ch)
+    multiqc(results_ch)
 }
 
 /*

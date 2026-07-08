@@ -14,7 +14,7 @@ process multiqc {
     
     // Workflow input stream
     input:
-        val(multiqc_ch)
+        path(results_ch)
 
     // Workflow output stream
     output:
@@ -26,6 +26,6 @@ process multiqc {
     // Script to execute (located in bin/ sub-directory)
     script:
     """
-    multiqc.sh ${multiqc_ch} multiqc.cmd &> multiqc.log 2>&1
+    multiqc.sh ${results_ch} multiqc.cmd &> multiqc.log 2>&1
     """ 
 }
