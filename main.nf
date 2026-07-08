@@ -15,7 +15,8 @@ def helpMessage() {
 
 Mandatory:
 --ONT_path		[path]	Absolute path to ONT data files.
---ref_genome            [path]  Absolute path to reference genome
+--length_min            [str]   Length minimum to accept read
+--quality               [str]   Quality to accept read
 --db_kraken             [path]  Absolute path to kraken database
 --model_medaka          [str]   Name of the model
 --env_semibin           [str]   Name of the environment
@@ -24,8 +25,13 @@ Mandatory:
 --db_megares_path       [path]  Absolute path to initial megares database
 --db_megares_type       [str]   Name of the database type
 --megares_db            [path]  Absolute path to megares database and index
+--db_mobileOG_path      [path]  Absolute path to initial mobileOG database
+--db_mobileOG_type      [str]   Name of the database type
 --mobileOG_db           [path]  Absolute path to mobileOG database and index
---db_plasmidfinder      [path}  Absolute path to plasmidfinder database and index
+--mobileog_metadata     [path]  Absolute path to mobileOG metadata
+--db_plasmidfinder_path [path}  Absolute path to initial plasmidfinder database
+--db_plasmidfinder_type [str]   Name of the database type
+--plasmidfinder_db      [path]  Absolute path to plasmidfinder database and index
 --gtdbtk_db             [path]  Absolute path to gtdbtk database
 --genomic_dist          [str]   Value of the genomic distance to consider co-occurrences
     
@@ -67,12 +73,12 @@ summary['Launch dir'] = workflow.launchDir
 summary['Working dir'] = workflow.workDir
 summary['Script dir'] = workflow.projectDir
 summary['ONT file(s)'] = params.ONT_path
-summary['Reference Genome'] = params.ref_genome
+summary['Nanofilt parameter'] = [params.length_min, params.quality]
 summary['Kraken2 database'] = params.db_kraken
 summary['Model Medaka'] = params.model_medaka
 summary['Environment SemiBin'] = params.env_semibin
 summary['Checkm2 database'] = params.db_checkm2
-summary['Abricate databases'] = params.db2_abricate
+summary['Abricate databases'] = [params.db1_abricate, params.db2_abricate, params.db3_abricate]
 summary['Megares database'] = params.megares_db
 summary['MobileOG database'] = params.mobileOG_db
 summary['Plasmidfinder database'] = params.plasmidfinder_db
